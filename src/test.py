@@ -47,7 +47,7 @@ def prepare_blast_slurmjob_text(
         "-outfmt 10 "+\
         "-max_target_seqs {max_target_seqs} ".format(max_target_seqs=max_target_seqs)+\
         "-num_threads {thread_count} ".format(thread_count=thread_count)+\
-        "-out {outputfilename}\n".format(outputfile=outputfilename)
+        "-out {outputfilename}\n".format(outputfilename=outputfilename)
         
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
