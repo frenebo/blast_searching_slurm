@@ -103,7 +103,7 @@ if __name__ == "__main__":
         word_size=3,
         num_iterations=2,
     )
-    job1_slurmpath = os.path.join(job1_working_dir, "job.slurm"
+    job1_slurmpath = os.path.join(job1_working_dir, "job.slurm")
     
     with open(job1_slurmpath, "w") as f:
         f.write(job1_text)
