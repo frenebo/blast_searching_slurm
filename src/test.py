@@ -88,17 +88,17 @@ def start_slurm_job(slurmjob_path):
     # print(out)
 
 if __name__ == "__main__":
-    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_1000_test/"
+    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_5000_test/"
     make_data_dir(job1_working_dir)
     
     job1_text = prepare_blast_slurmjob_text(
-        jobname="job_top1000_blast",
+        jobname="psib5000",
         query_fasta_path="/home/pk5192/Documents/seqtest/doing_with_slurm/MtrC_WP_164927685.1.fasta",
         blastdb_path="/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/",
         working_dirpath=job1_working_dir,
-        outputfilename="top_1000.csv",
+        outputfilename="top_5000.csv",
         thread_count=4,
-        max_target_seqs=500,
+        max_target_seqs=5000,
         evalue=0.05,
         word_size=3,
         num_iterations=2,
