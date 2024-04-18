@@ -69,8 +69,8 @@ def start_slurm_job(slurmjob_path):
     print(comm)
     process = subprocess.Popen(comm,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     # process = ubpr
-    output, error=proces.communicate()
-    errcode = proces.returncode
+    output, error=process.communicate()
+    errcode = process.returncode
     if errcode != 0:
         print(output.decode("utf-8"))
         print(error.decode("utf-8"))
