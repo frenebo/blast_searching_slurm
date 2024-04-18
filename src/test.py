@@ -21,7 +21,6 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --job-name={}\n".format(jobname) +\
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks=4\n" +\
-        # "#SBATCH --cpus-per-task=1\n" +\
         "#SBATCH --mem=16G\n" +\
         "#SBATCH --time=01:00:00\n" +\
         "#SBATCH --mail-type=begin\n" +\
