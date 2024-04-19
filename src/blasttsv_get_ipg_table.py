@@ -28,11 +28,16 @@ if __name__ == "__main__":
                 continue
             
             refs_for_protseq_match = line_vals[3]
+            cnt = 0
             for protref in refs_for_protseq_match.split(";"):
                 prot_accession = protref.split("|")[1]
                 # print(prot_accession)
                 prot_accessions_to_search.append(prot_accession)
-                break
+                # break
+                cnt += 1
+                if cnt > 1:
+                    break
+            # prot_accessions_to_search
             # print(refs_for_protseq_match.split(";"))
             break
     with open(args.intermediate_prot_accession_file, "w") as f:
