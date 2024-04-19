@@ -2,17 +2,22 @@ import argparse
 from Bio import Entrez
 # import pandas as pd
 import subprocess
+import xml
 import math
 
 def search_proteins_in_entrez(all_prot_accession_ids):
     # Split requests into groups of 1000
-    group_search_size = 20
+    group_search_size = 2
     for i in range(math.ceil(len(all_prot_accession_ids) / 1000)):
         prot_search_group = all_prot_accession_ids[i * group_search_size : (i + 1) * group_search_size]
-        http_response = Entrez.esearch("protein", ",".join(prot_search_group), rettype="text")
+        http_response = Entrez.esearch("protein", ",".join(prot_search_group))
         text_response = http_response.read().decode('utf-8')
-        print(prot_search_group)
-        print(text_response)
+        # print(prot_search_group)
+        # print(text_response)
+
+        xml_resp = xml.etree.ElementTree.fromstring(text_response)
+        xml_resp.getroot().
+
 
         break
 
