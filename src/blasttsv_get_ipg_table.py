@@ -40,27 +40,6 @@ def search_proteins_in_entrez(all_prot_accession_ids):
 
         # break
 
-def do_entrez_thingy():
-    comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
-        accession_text_list=args.intermediate_prot_accession_file,
-        output_efetch_tsv=args.output_efetch_tsv,
-        )
-
-    process = subprocess.Popen(comm,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-
-    output, error=process.communicate()
-    errcode = process.returncode
-    
-    output = output.decode("utf-8")
-    error = error.decode("utf-8")
-
-    if errcode != 0:
-        print(output)
-        print(error)
-        raise Exception("Got error code {}".format(errcode))
-    
-    print(output)
-    print(error)
 
 def get_protein_info_from_entrez(prot_accessions):
     group_search_size = 100
@@ -86,7 +65,7 @@ def get_protein_info_from_entrez(prot_accessions):
         without_errlines = []
         for l in lines:
             if len(l.split("\t")) != 11:
-                print("   line err: {}".format(len(l.split("\t")), l))
+                print("   line err: {}".format(l))
             else:
                 without_errlines.append(l)
         lines = without_errlines
@@ -110,14 +89,14 @@ if __name__ == "__main__":
                     description="Take the tsv output from the blast and use eutils to get source info"
     )
     parser.add_argument("source_blast_tsv")
-    parser.add_argument("intermediate_prot_accession_file")
+    # parser.add_argument("intermediate_prot_accession_file")
     parser.add_argument("output_efetch_tsv")
     parser.add_argument("entrez_email")
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
-    if args.intermediate_prot_accession_file[-4:] != ".txt":
-        raise Exception("expected txt file!")
+    # if args.intermediate_prot_accession_file[-4:] != ".txt":
+    #     raise Exception("expected txt file!")
     elif args.output_efetch_tsv[-4:] != ".tsv":
         raise Exception("expected tsv file")
     
@@ -152,6 +131,3 @@ if __name__ == "__main__":
     restext = get_protein_info_from_entrez(prot_accession_presentindb)
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
-    # with open(args.intermediate_prot_accession_file, "w") as f:
-        # f.write("\t".join(prot_accessions_to_search))
-    
