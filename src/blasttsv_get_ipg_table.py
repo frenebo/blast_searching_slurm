@@ -35,7 +35,7 @@ if __name__ == "__main__":
             # print(refs_for_protseq_match.split(";"))
             break
     with open(args.intermediate_prot_accession_file, "w") as f:
-        f.write(",".join(prot_accessions_to_search))
+        f.write("\t".join(prot_accessions_to_search))
     
     comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
         accession_text_list=args.intermediate_prot_accession_file,
