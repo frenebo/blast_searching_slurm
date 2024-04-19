@@ -22,7 +22,7 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks=4\n" +\
         "#SBATCH --mem=16G\n" +\
-        "#SBATCH --time=01:00:00\n" +\
+        "#SBATCH --time=05:00:00\n" +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
         "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
@@ -87,19 +87,20 @@ def start_slurm_job(slurmjob_path):
         print(output[len(expected_prefix):])
     # print(out)
 
-if __name__ == "__main__":
-    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_5000_test/"
+def try_amt(maxseqs,stringname):
+    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_{}_test/".format(stringname)
+    
     make_data_dir(job1_working_dir)
     
     job1_text = prepare_blast_slurmjob_text(
-        jobname="psib5000",
+        jobname="psib{}".format(stringname),
         query_fasta_path="/home/pk5192/Documents/seqtest/doing_with_slurm/MtrC_WP_164927685.1.fasta",
         blastdb_path="/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/",
         working_dirpath=job1_working_dir,
-        outputfilename="top_5000.csv",
+        outputfilename="top_{}.csv".format(stringname),
         thread_count=4,
-        max_target_seqs=5000,
-        evalue=0.05,
+        max_target_seqs=maxseqs,
+        evalue=0.005,
         word_size=3,
         num_iterations=2,
     )
@@ -110,3 +111,10 @@ if __name__ == "__main__":
     
     start_slurm_job(job1_slurmpath)
     
+
+if __name__ == "__main__":
+    try_amt(100,"1hd")
+    try_amt(500,"5hd")
+    try_amt(1000,"1k")
+    try_amt(1000,"5k")
+    try_amt(10000, "10k")
