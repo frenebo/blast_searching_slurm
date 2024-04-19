@@ -14,7 +14,7 @@ def search_proteins_in_entrez(all_prot_accession_ids):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
         if end_idx >= len(all_prot_accession_ids):
-            end_idx = len(all_prot_accession_ids) - 1
+            end_idx = len(all_prot_accession_ids)
         print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
         
         prot_search_group = all_prot_accession_ids[start_idx : end_idx]
