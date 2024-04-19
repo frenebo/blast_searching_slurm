@@ -64,6 +64,10 @@ def get_protein_info_from_entrez(prot_accessions):
         
         without_errlines = []
         for l in lines:
+            # skip empty lines at end of output
+            if len(l) == 0:
+                continue
+            
             if len(l.split("\t")) != 11:
                 print("   line err: {}".format(l))
             else:
@@ -71,7 +75,7 @@ def get_protein_info_from_entrez(prot_accessions):
         lines = without_errlines
 
             
-        output_tsv_string += "\n".join(lines)
+        output_tsv_string += "\n".join(lines) + "\n"
     
     return output_tsv_string
         # print(text_response)
