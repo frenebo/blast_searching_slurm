@@ -22,7 +22,7 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --job-name={}\n".format(jobname) +\
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks={}\n".format(thread_count) +\
-        "#SBATCH --mem=30G\n" +\
+        "#SBATCH --mem=10G\n" +\
         "#SBATCH --time={}\n".format(timestring) +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
@@ -50,7 +50,7 @@ def prepare_blast_slurmjob_text(
         "-max_target_seqs {max_target_seqs} ".format(max_target_seqs=max_target_seqs)+\
         "-num_threads {thread_count} ".format(thread_count=thread_count)+\
         "-out {outputfilename} ".format(outputfilename=outputfilename)+\
-        "-outfmt \"10 qseqid sseqid sgi sacc staxids sscinames scomnames sblastnames sskingdoms stitle mismatch gapopen qstart qend sstart send evalue bitscoreqseqid pident length bitscore\" \n"
+        "-outfmt \"6 qseqid sseqid sgi sallseqid sallgi sacc sallacc staxids sscinames scomnames sblastnames sskingdoms stitle salltitles sstrand mismatch gapopen qstart qend sstart send evalue pident length bitscore\" \n"
         
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
@@ -90,17 +90,17 @@ def start_slurm_job(slurmjob_path):
         print(output[len(expected_prefix):])
     # print(out)
 
-def run_slrm_blast(eval_thresh, num_iterations, stringname, timestring):
+def run_slrm_blast(query_fasta_path, eval_thresh, num_iterations, stringname, timestring):
     job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/{}_test/".format(stringname)
     
     make_data_dir(job1_working_dir)
     
     job1_text = prepare_blast_slurmjob_text(
         jobname="{}".format(stringname),
-        query_fasta_path="/home/pk5192/Documents/seqtest/doing_with_slurm/MtrC_WP_164927685.1.fasta",
+        query_fasta_path=query_fasta_path,
         blastdb_path="/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/",
         working_dirpath=job1_working_dir,
-        outputfilename="psiblastoutput_{}.csv".format(stringname),
+        outputfilename="psiblastoutput_{}.tsv".format(stringname),
         thread_count=4,
         max_target_seqs=100000,
         evalue=eval_thresh,
@@ -121,9 +121,23 @@ if __name__ == "__main__":
     # try_amt(500,"5hd")
     # try_amt(1000,"1k")
     # try_amt(1000,"5k")
-    run_slrm_blast(eval_thresh=0.05, num_iterations=1, stringname="pk05", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="pk01", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="pk005", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="pk001", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.0005, num_iterations=1, stringname="pk0005", timestring="04:00:00")
+    # run_slrm_blast(eval_thresh=0.05, num_iterations=1, stringname="pk05", timestring="04:00:00")
+    # run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="pk01", timestring="04:00:00")
+    # run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="pk005", timestring="04:00:00")
+    # run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="pk001", timestring="04:00:00")
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrC_WP_164927685.1.fasta",
+        eval_thresh=0.001,
+        num_iterations=1,
+        stringname="MtrC_search",
+        timestring="02:30:00")
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrA_WP_011706573.1.fasta",
+        eval_thresh=0.001,
+        num_iterations=1,
+        stringname="MtrA_search",
+        timestring="02:30:00")
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrB_WP_011706574.1.fasta",
+        eval_thresh=0.001,
+        num_iterations=1,
+        stringname="MtrB_search",
+        timestring="02:30:00")
     # try_amt(10, "10its", "40:00:00")
