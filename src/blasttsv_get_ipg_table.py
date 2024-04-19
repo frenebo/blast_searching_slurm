@@ -15,7 +15,7 @@ def search_proteins_in_entrez(all_prot_accession_ids):
         end_idx =  (i + 1) * group_search_size
         if end_idx >= len(all_prot_accession_ids):
             end_idx = len(all_prot_accession_ids) - 1
-        print("Searching entrez for proteins {}-{}".format(start_idx,end_idx))
+        print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
         
         prot_search_group = all_prot_accession_ids[start_idx : end_idx]
         http_response = Entrez.esearch("protein", ",".join(prot_search_group))
