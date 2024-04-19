@@ -26,8 +26,9 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --time={}\n".format(timestring) +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
-        "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
         "\n"
+    
+        # "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
     
     tellbash_echo_commands = "set -x\n"
     
@@ -125,18 +126,18 @@ if __name__ == "__main__":
     # run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="pk01", timestring="04:00:00")
     # run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="pk005", timestring="04:00:00")
     # run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="pk001", timestring="04:00:00")
-    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrC_WP_164927685.1.fasta",
-        eval_thresh=0.001,
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/query_seqs/mr1_mtrproteins/MtrC_WP_011071901.1.fasta",
+        eval_thresh=0.005,
         num_iterations=1,
         stringname="MtrC_search",
         timestring="02:30:00")
-    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrA_WP_011706573.1.fasta",
-        eval_thresh=0.001,
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/query_seqs/mr1_mtrproteins/MtrA_WP_011071900.1.fasta",
+        eval_thresh=0.005,
         num_iterations=1,
         stringname="MtrA_search",
         timestring="02:30:00")
-    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/src/MtrB_WP_011706574.1.fasta",
-        eval_thresh=0.001,
+    run_slrm_blast(query_fasta_path="/home/pk5192/Documents/blast_searching_slurm/query_seqs/mr1_mtrproteins/MtrB_WP_011071899.1.fasta",
+        eval_thresh=0.005,
         num_iterations=1,
         stringname="MtrB_search",
         timestring="02:30:00")
