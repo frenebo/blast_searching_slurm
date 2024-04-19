@@ -49,7 +49,7 @@ def prepare_blast_slurmjob_text(
         "-max_target_seqs {max_target_seqs} ".format(max_target_seqs=max_target_seqs)+\
         "-num_threads {thread_count} ".format(thread_count=thread_count)+\
         "-out {outputfilename} ".format(outputfilename=outputfilename)+\
-        "-outfmt \"10 qseqid sseqid sgi sacc staxids sscinames scomnames sblastnames sskingdoms stitle pident length mismatch gapopen qstart qend sstart send evalue bitscoreqseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore\" \n"+
+        "-outfmt \"10 qseqid sseqid sgi sacc staxids sscinames scomnames sblastnames sskingdoms stitle pident length mismatch gapopen qstart qend sstart send evalue bitscoreqseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore\" \n"
         
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
