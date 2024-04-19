@@ -35,7 +35,7 @@ if __name__ == "__main__":
                 prot_accessions_to_search.append(prot_accession)
                 # break
                 cnt += 1
-                if cnt > 3:
+                if cnt > 2:
                     break
             # prot_accessions_to_search
             # print(refs_for_protseq_match.split(";"))
