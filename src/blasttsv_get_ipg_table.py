@@ -1,6 +1,7 @@
 import argparse
 from Bio import Entrez
 # import pandas as pd
+import xml.etree.ElementTree
 import subprocess
 import xml
 import math
