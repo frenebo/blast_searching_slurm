@@ -50,7 +50,7 @@ def prepare_blast_slurmjob_text(
         "-max_target_seqs {max_target_seqs} ".format(max_target_seqs=max_target_seqs)+\
         "-num_threads {thread_count} ".format(thread_count=thread_count)+\
         "-out {outputfilename} ".format(outputfilename=outputfilename)+\
-        "-outfmt \"10 qseqid sseqid sgi sacc staxids sscinames scomnames sblastnames sskingdoms stitle pident length mismatch gapopen qstart qend sstart send evalue bitscoreqseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore\" \n"
+        "-outfmt \"10 qseqid sseqid sgi sacc staxids sscinames scomnames sblastnames sskingdoms stitle mismatch gapopen qstart qend sstart send evalue bitscoreqseqid pident length bitscore\" \n"
         
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
@@ -90,8 +90,8 @@ def start_slurm_job(slurmjob_path):
         print(output[len(expected_prefix):])
     # print(out)
 
-def try_amt(num_iterations, stringname, timestring):
-    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_{}_test/".format(stringname)
+def run_slrm_blast(eval_thresh, num_iterations, stringname, timestring):
+    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/{}_test/".format(stringname)
     
     make_data_dir(job1_working_dir)
     
@@ -102,8 +102,8 @@ def try_amt(num_iterations, stringname, timestring):
         working_dirpath=job1_working_dir,
         outputfilename="top_{}.csv".format(stringname),
         thread_count=4,
-        max_target_seqs=50000,
-        evalue=0.05,
+        max_target_seqs=100000,
+        evalue=eval_thresh,
         word_size=3,
         num_iterations=num_iterations,
         timestring=timestring,
@@ -121,7 +121,9 @@ if __name__ == "__main__":
     # try_amt(500,"5hd")
     # try_amt(1000,"1k")
     # try_amt(1000,"5k")
-    try_amt(1, "1its", "04:00:00")
-    try_amt(2, "2its", "08:00:00")
-    try_amt(5, "5its", "20:00:00")
+    run_slrm_blast(eval_thresh=0.05, num_iterations=1, stringname="th.05", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="th.01", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="th.005", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="th.001", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.0005, num_iterations=1, stringname="th.0005", timestring="04:00:00")
     # try_amt(10, "10its", "40:00:00")
