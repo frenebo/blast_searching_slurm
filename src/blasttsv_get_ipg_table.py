@@ -63,7 +63,7 @@ def do_entrez_thingy():
     print(error)
 
 def get_protein_info_from_entrez(prot_accessions):
-    group_req_size = 100
+    group_search_size = 100
     for i in range(math.ceil(len(prot_accessions) / group_search_size)):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
