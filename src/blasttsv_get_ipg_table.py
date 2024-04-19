@@ -11,7 +11,13 @@ def search_proteins_in_entrez(all_prot_accession_ids):
     # Split requests into groups of 1000
     group_search_size = 1000
     for i in range(math.ceil(len(all_prot_accession_ids) / group_search_size)):
-        prot_search_group = all_prot_accession_ids[i * group_search_size : (i + 1) * group_search_size]
+        start_idx = i * group_search_size
+        end_idx =  (i + 1) * group_search_size
+        if end_idx >= len(all_prot_accession_ids):
+            end_idx = len(all_prot_accession_ids) - 1
+        print("Searching entrez for proteins {}-{}".format(start_idx,end_idx))
+        
+        prot_search_group = all_prot_accession_ids[start_idx : end_idx]
         http_response = Entrez.esearch("protein", ",".join(prot_search_group))
         text_response = http_response.read().decode('utf-8')
         # print(prot_search_group)
@@ -29,6 +35,8 @@ def search_proteins_in_entrez(all_prot_accession_ids):
                 # print(xml_notfoundphrase.text)
     
     proteins_present_in_db = [acc for acc in all_prot_accession_ids if (acc not in proteins_not_found_in_database)]
+
+    return proteins_present_in_db
 
         # break
 
