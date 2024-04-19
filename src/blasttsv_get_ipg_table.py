@@ -64,6 +64,7 @@ def do_entrez_thingy():
 
 def get_protein_info_from_entrez(prot_accessions):
     group_search_size = 100
+    output_tsv_string = ""
     for i in range(math.ceil(len(prot_accessions) / group_search_size)):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
@@ -74,8 +75,11 @@ def get_protein_info_from_entrez(prot_accessions):
         search_prots = prot_accessions[start_idx:end_idx]
         html_response = Entrez.efetch(db="protein", id=",".join(search_prots), rettype='ipg', retmode='text')
         text_response = html_response.read()
-        print(text_response)
-        break
+        output_tsv_string += text_response
+    
+    return output_tsv_string
+        # print(text_response)
+        # break
         # text_respo
         # print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
         
@@ -123,12 +127,14 @@ if __name__ == "__main__":
             # prot_accessions_to_search
             # print(refs_for_protseq_match.split(";"))
             # break
-    prot_accessions_to_search = prot_accessions_to_search[0:100]
+    prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
     prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
-    get_protein_info_from_entrez(prot_accession_presentindb)
+    restext = get_protein_info_from_entrez(prot_accession_presentindb)
+    with open(args.output_efetch_tsv, "w") as f:
+        f.write(restext)
     # with open(args.intermediate_prot_accession_file, "w") as f:
         # f.write("\t".join(prot_accessions_to_search))
     
