@@ -61,6 +61,26 @@ def do_entrez_thingy():
     
     print(output)
     print(error)
+
+def get_protein_info_from_entrez(prot_accessions):
+    group_req_size = 100
+    for i in range(math.ceil(len(prot_accessions) / group_search_size)):
+        start_idx = i * group_search_size
+        end_idx =  (i + 1) * group_search_size
+        if end_idx >= len(prot_accessions):
+            end_idx = len(prot_accessions)
+        
+        print("Getting info for proteins {}-{}".format(start_idx,end_idx))
+        search_prots = prot_accessions[start_idx:end_idx]
+        html_response = Entrez.efetch(db="protein", id=search_prots.join(","))
+        text_response = html_response.read().decode("utf-8")
+        print(text_response)
+        break
+        # text_respo
+        # print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
+        
+
+    # Entrez.efetch(db="protein", id=prot_accessions.join(","))
 # "/home/pk5192/Documents/blast_searching_slurm/data"
 
 if __name__ == "__main__":
@@ -106,6 +126,8 @@ if __name__ == "__main__":
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
     prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
+
+    get_protein_info_from_entrez(prot_accession_presentindb)
     # with open(args.intermediate_prot_accession_file, "w") as f:
         # f.write("\t".join(prot_accessions_to_search))
     
