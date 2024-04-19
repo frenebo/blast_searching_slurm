@@ -20,9 +20,9 @@ def prepare_blast_slurmjob_text(
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={}\n".format(jobname) +\
         "#SBATCH --nodes=1\n" +\
-        "#SBATCH --ntasks=4\n" +\
-        "#SBATCH --mem=16G\n" +\
-        "#SBATCH --time=05:00:00\n" +\
+        "#SBATCH --ntasks={}\n".format(thread_count) +\
+        "#SBATCH --mem=30G\n" +\
+        "#SBATCH --time=48:00:00\n" +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
         "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
@@ -98,7 +98,7 @@ def try_amt(maxseqs,stringname):
         blastdb_path="/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/",
         working_dirpath=job1_working_dir,
         outputfilename="top_{}.csv".format(stringname),
-        thread_count=4,
+        thread_count=6,
         max_target_seqs=maxseqs,
         evalue=0.005,
         word_size=3,
