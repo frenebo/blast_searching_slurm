@@ -28,8 +28,6 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --mail-type=end\n" +\
         "\n"
     
-        # "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
-    
     tellbash_echo_commands = "set -x\n"
     
     module_setup = "module purge\n" +\
