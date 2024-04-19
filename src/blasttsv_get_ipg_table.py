@@ -72,7 +72,7 @@ def get_protein_info_from_entrez(prot_accessions):
         
         print("Getting info for proteins {}-{}".format(start_idx,end_idx))
         search_prots = prot_accessions[start_idx:end_idx]
-        html_response = Entrez.efetch(db="protein", id=search_prots.join(","))
+        html_response = Entrez.efetch(db="protein", id=",".join(search_prots))
         text_response = html_response.read().decode("utf-8")
         print(text_response)
         break
