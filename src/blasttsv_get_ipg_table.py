@@ -18,6 +18,12 @@ def search_proteins_in_entrez(all_prot_accession_ids):
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
         # xml_resp.getroot().
+        xml_errlist = xml_resp.find("ErrorList")
+        if xml_errlist is None:
+            continue
+        else:
+            for xml_notfoundphrase in xml_errlist.findall("PhraseNotFound"):
+                print(xml_notfoundphrase.text)
 
 
         break
