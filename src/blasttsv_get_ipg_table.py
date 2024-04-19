@@ -76,13 +76,23 @@ def get_protein_info_from_entrez(prot_accessions):
         html_response = Entrez.efetch(db="protein", id=",".join(search_prots), rettype='ipg', retmode='text')
         text_response = html_response.read().decode("utf-8")
         
-        # Keep header if this is the first request
-        if i == 0:
-            output_tsv_string += text_response
-        else:
-            lines = text_response.split("\n")
+        
+        lines = text_response.split("\n")
+        
+        # Remove extra header if this is the first request
+        if i != 0:
             lines = lines[1:]
-            output_tsv_string += "\n".join(lines)
+        
+        without_errlines = []
+        for l in lines:
+            if len(l.split("\t") != 10):
+                print("line err: {}".format(l))
+            else:
+                without_errlines.append(l)
+        lines = without_errlines
+
+            
+        output_tsv_string += "\n".join(lines)
     
     return output_tsv_string
         # print(text_response)
