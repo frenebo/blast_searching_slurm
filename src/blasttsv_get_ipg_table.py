@@ -46,6 +46,7 @@ if __name__ == "__main__":
     parser.add_argument("source_blast_tsv")
     parser.add_argument("intermediate_prot_accession_file")
     parser.add_argument("output_efetch_tsv")
+    parser.add_argument("entrez_email")
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
@@ -53,6 +54,8 @@ if __name__ == "__main__":
         raise Exception("expected txt file!")
     elif args.output_efetch_tsv[-4:] != ".tsv":
         raise Exception("expected tsv file")
+    
+    Entrez.email = args.entrez_email
     
     prot_accessions_to_search = []
     
