@@ -11,6 +11,7 @@ def search_proteins_in_entrez(all_prot_accession_ids):
         prot_search_group = all_prot_accession_ids[i * group_search_size : (i + 1) * group_search_size]
         http_response = Entrez.esearch("protein", ",".join(prot_search_group), rettype="text")
         text_response = http_response.read().decode('utf-8')
+        print(prot_search_group)
         print(text_response)
 
         break
