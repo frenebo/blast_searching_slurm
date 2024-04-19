@@ -96,11 +96,11 @@ def run_slrm_blast(eval_thresh, num_iterations, stringname, timestring):
     make_data_dir(job1_working_dir)
     
     job1_text = prepare_blast_slurmjob_text(
-        jobname="psib{}".format(stringname),
+        jobname="{}".format(stringname),
         query_fasta_path="/home/pk5192/Documents/seqtest/doing_with_slurm/MtrC_WP_164927685.1.fasta",
         blastdb_path="/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/",
         working_dirpath=job1_working_dir,
-        outputfilename="top_{}.csv".format(stringname),
+        outputfilename="psiblastoutput_{}.csv".format(stringname),
         thread_count=4,
         max_target_seqs=100000,
         evalue=eval_thresh,
@@ -121,9 +121,9 @@ if __name__ == "__main__":
     # try_amt(500,"5hd")
     # try_amt(1000,"1k")
     # try_amt(1000,"5k")
-    run_slrm_blast(eval_thresh=0.05, num_iterations=1, stringname="th.05", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="th.01", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="th.005", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="th.001", timestring="04:00:00")
-    run_slrm_blast(eval_thresh=0.0005, num_iterations=1, stringname="th.0005", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.05, num_iterations=1, stringname="pk05", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.01, num_iterations=1, stringname="pk01", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.005, num_iterations=1, stringname="pk005", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.001, num_iterations=1, stringname="pk001", timestring="04:00:00")
+    run_slrm_blast(eval_thresh=0.0005, num_iterations=1, stringname="pk0005", timestring="04:00:00")
     # try_amt(10, "10its", "40:00:00")
