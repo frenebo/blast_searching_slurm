@@ -86,7 +86,7 @@ def get_protein_info_from_entrez(prot_accessions):
         without_errlines = []
         for l in lines:
             if len(l.split("\t")) != 10:
-                print("line err: {}".format(l))
+                print("line err: {}, {}".format(len(l.split("\t"), l))
             else:
                 without_errlines.append(l)
         lines = without_errlines
