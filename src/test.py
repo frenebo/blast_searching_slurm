@@ -22,7 +22,7 @@ def prepare_blast_slurmjob_text(
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks={}\n".format(thread_count) +\
         "#SBATCH --mem=30G\n" +\
-        "#SBATCH --time=48:00:00\n" +\
+        "#SBATCH --time={}\n".format(timestring) +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
         "#SBATCH --mail-user=pk5192@princeton.edu\n" +\
@@ -89,7 +89,7 @@ def start_slurm_job(slurmjob_path):
         print(output[len(expected_prefix):])
     # print(out)
 
-def try_amt(num_iterations, stringname):
+def try_amt(num_iterations, stringname, timestring):
     job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/first_{}_test/".format(stringname)
     
     make_data_dir(job1_working_dir)
@@ -105,6 +105,7 @@ def try_amt(num_iterations, stringname):
         evalue=0.005,
         word_size=3,
         num_iterations=num_iterations,
+        timestring=timestring,
     )
     job1_slurmpath = os.path.join(job1_working_dir, "job.slurm")
     
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     # try_amt(500,"5hd")
     # try_amt(1000,"1k")
     # try_amt(1000,"5k")
-    try_amt(1, "1its", "02:00:00")
-    try_amt(2, "2its", "04:00:00")
-    try_amt(5, "5its", "10:00:00")
-    try_amt(10, "10its", "20:00:00")
+    try_amt(1, "1its", "04:00:00")
+    try_amt(2, "2its", "08:00:00")
+    try_amt(5, "5its", "20:00:00")
+    try_amt(10, "10its", "40:00:00")
