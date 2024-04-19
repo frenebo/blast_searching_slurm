@@ -10,9 +10,9 @@ if __name__ == "__main__":
     parser.add_argument("source_blast_tsv")
     parser.add_argument("output_efetch_tsv")
     args = parser.parse_args()
-    if parser.source_blast_tsv[-4:] != ".tsv":
+    if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
-    elif parser.output_efetch_tsv[-4:] != ".tsv":
+    elif args.output_efetch_tsv[-4:] != ".tsv":
         raise Exception("expected tsv file")
     
     with open(args.source_blast_tsv, "r") as f:
