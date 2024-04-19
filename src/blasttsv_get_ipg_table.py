@@ -1,6 +1,41 @@
 import argparse
+from Bio import Entrez
 # import pandas as pd
 import subprocess
+import math
+
+def search_proteins_in_entrez(all_prot_accession_ids):
+    # Split requests into groups of 1000
+    group_search_size = 20
+    for i in range(math.ceil(len(all_prot_accession_ids) / 1000)):
+        prot_search_group = all_prot_accession_ids[i * group_search_size : (i + 1) * group_search_size]
+        http_response = Entrez.esearch("protein", ",".join(prot_search_group), rettype="gb")
+        text_response = http_response.read().decode('utf-8')
+        print(text_response)
+
+        break
+
+def do_entrez_thingy():
+    comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
+        accession_text_list=args.intermediate_prot_accession_file,
+        output_efetch_tsv=args.output_efetch_tsv,
+        )
+
+    process = subprocess.Popen(comm,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
+    output, error=process.communicate()
+    errcode = process.returncode
+    
+    output = output.decode("utf-8")
+    error = error.decode("utf-8")
+
+    if errcode != 0:
+        print(output)
+        print(error)
+        raise Exception("Got error code {}".format(errcode))
+    
+    print(output)
+    print(error)
 # "/home/pk5192/Documents/blast_searching_slurm/data"
 
 if __name__ == "__main__":
@@ -34,32 +69,14 @@ if __name__ == "__main__":
                 # print(prot_accession)
                 prot_accessions_to_search.append(prot_accession)
                 # break
-                cnt += 1
-                if cnt > 2:
-                    break
+                # cnt += 1
+                # if cnt > 2:
+                #     break
             # prot_accessions_to_search
             # print(refs_for_protseq_match.split(";"))
-            break
-    with open(args.intermediate_prot_accession_file, "w") as f:
-        f.write("\t".join(prot_accessions_to_search))
+            # break
     
-    comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
-        accession_text_list=args.intermediate_prot_accession_file,
-        output_efetch_tsv=args.output_efetch_tsv,
-        )
-
-    process = subprocess.Popen(comm,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-
-    output, error=process.communicate()
-    errcode = process.returncode
+    search_proteins_in_entrez(prot_accessions_to_search)
+    # with open(args.intermediate_prot_accession_file, "w") as f:
+        # f.write("\t".join(prot_accessions_to_search))
     
-    output = output.decode("utf-8")
-    error = error.decode("utf-8")
-
-    if errcode != 0:
-        print(output)
-        print(error)
-        raise Exception("Got error code {}".format(errcode))
-    
-    print(output)
-    print(error)
