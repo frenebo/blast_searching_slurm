@@ -16,7 +16,7 @@ def search_proteins_in_entrez(all_prot_accession_ids):
         # print(text_response)
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
-        xml_resp.getroot().
+        # xml_resp.getroot().
 
 
         break
