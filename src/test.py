@@ -16,6 +16,7 @@ def prepare_blast_slurmjob_text(
     evalue,
     word_size,
     num_iterations,
+    timestring,
     ):
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={}\n".format(jobname) +\
