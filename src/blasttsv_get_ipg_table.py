@@ -7,14 +7,15 @@ import xml
 import math
 
 def search_proteins_in_entrez(all_prot_accession_ids):
+    proteins_not_found_in_database = []
     # Split requests into groups of 1000
-    group_search_size = 2
-    for i in range(math.ceil(len(all_prot_accession_ids) / 1000)):
+    group_search_size = 1000
+    for i in range(math.ceil(len(all_prot_accession_ids) / group_search_size)):
         prot_search_group = all_prot_accession_ids[i * group_search_size : (i + 1) * group_search_size]
         http_response = Entrez.esearch("protein", ",".join(prot_search_group))
         text_response = http_response.read().decode('utf-8')
-        print(prot_search_group)
-        print(text_response)
+        # print(prot_search_group)
+        # print(text_response)
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
         # xml_resp.getroot().
@@ -23,10 +24,13 @@ def search_proteins_in_entrez(all_prot_accession_ids):
             continue
         else:
             for xml_notfoundphrase in xml_errlist.findall("PhraseNotFound"):
-                print(xml_notfoundphrase.text)
+                missing_protein_accession = xml_notfoundphrase.text
+                proteins_not_found_in_database.append(missing_protein_accession)
+                # print(xml_notfoundphrase.text)
+    
+    proteins_present_in_db = [acc for acc in all_prot_accession_ids if (acc not in proteins_not_found_in_database)]
 
-
-        break
+        # break
 
 def do_entrez_thingy():
     comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
@@ -91,8 +95,9 @@ if __name__ == "__main__":
             # prot_accessions_to_search
             # print(refs_for_protseq_match.split(";"))
             # break
-    
-    search_proteins_in_entrez(prot_accessions_to_search)
+    print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
+    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
+    print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
     # with open(args.intermediate_prot_accession_file, "w") as f:
         # f.write("\t".join(prot_accessions_to_search))
     
