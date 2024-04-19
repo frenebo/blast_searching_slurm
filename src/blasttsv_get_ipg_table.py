@@ -31,7 +31,7 @@ if __name__ == "__main__":
             for protref in refs_for_protseq_match.split(";"):
                 prot_accession = protref.split("|")[1]
                 # print(prot_accession)
-                prot_accessions_to_search.append(prot_accessions_to_search)
+                prot_accessions_to_search.append(prot_accession)
             # print(refs_for_protseq_match.split(";"))
             break
     with open(args.intermediate_prot_accession_file, "w") as f:
