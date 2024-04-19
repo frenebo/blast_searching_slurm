@@ -70,9 +70,9 @@ def get_protein_info_from_entrez(prot_accessions):
         if end_idx >= len(prot_accessions):
             end_idx = len(prot_accessions)
         
-        print("Getting info for proteins {}-{}".format(start_idx,end_idx))
+        print("Getting info for proteins {}-{}".format(start_idx,end_idx-1))
         search_prots = prot_accessions[start_idx:end_idx]
-        html_response = Entrez.efetch(db="protein", id=",".join(search_prots), rettype="gb", retmode="text")
+        html_response = Entrez.efetch(db="protein", id=",".join(search_prots), format="ipg")
         text_response = html_response.read()
         print(text_response)
         break
