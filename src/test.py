@@ -92,7 +92,7 @@ def start_slurm_job(slurmjob_path):
     # print(out)
 
 def run_slrm_blast(query_fasta_path, eval_thresh, num_iterations, stringname, timestring):
-    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/{}_test/".format(stringname)
+    job1_working_dir = "/home/pk5192/Documents/blast_searching_slurm/data/MR1queries/{}_test/".format(stringname)
     
     make_data_dir(job1_working_dir)
     
