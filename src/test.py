@@ -102,8 +102,8 @@ def try_amt(num_iterations, stringname, timestring):
         working_dirpath=job1_working_dir,
         outputfilename="top_{}.csv".format(stringname),
         thread_count=4,
-        max_target_seqs=10000,
-        evalue=0.005,
+        max_target_seqs=50000,
+        evalue=0.05,
         word_size=3,
         num_iterations=num_iterations,
         timestring=timestring,
@@ -124,4 +124,4 @@ if __name__ == "__main__":
     try_amt(1, "1its", "04:00:00")
     try_amt(2, "2its", "08:00:00")
     try_amt(5, "5its", "20:00:00")
-    try_amt(10, "10its", "40:00:00")
+    # try_amt(10, "10its", "40:00:00")
