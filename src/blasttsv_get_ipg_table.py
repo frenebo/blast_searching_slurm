@@ -22,5 +22,7 @@ if __name__ == "__main__":
                 continue
             
             refs_for_protseq_match = line_vals[3]
-            print(refs_for_protseq_match)
+            for protref in refs_for_protseq_match.split(";"):
+                print(protref.split("|")[1])
+            # print(refs_for_protseq_match.split(";"))
             break
