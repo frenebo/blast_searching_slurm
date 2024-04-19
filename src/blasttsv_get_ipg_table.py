@@ -39,7 +39,7 @@ if __name__ == "__main__":
     
     comm = "cat '{accession_text_list}' | epost -db protein | efetch -format ipg  > {output_efetch_tsv}".format(
         accession_text_list=args.intermediate_prot_accession_file,
-        output_efetch_tsv=output_efetch_tsv,
+        output_efetch_tsv=args.output_efetch_tsv,
         )
 
     process = subprocess.Popen(comm,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
