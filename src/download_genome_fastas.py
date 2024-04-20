@@ -50,10 +50,14 @@ if __name__ == "__main__":
                     #if chunk: 
                     f.write(chunk)
 
-        print(" unzipping {} to {}")
+        print(" unzipping {} to {}".format(zip_file_path, accession_data_dir))
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(accession_data_dir)
         
+        # catalog_json_fp = os.path.join(accession_data_dir, "ncbi_dataset/data/dataset_catalog.json")
+        # assembly_data_json_fp = os.path.join(accession_data_dir, "ncbi_dataset/data/assembly_data_report.jsonl")
+
+
         # break
         # if idx > 20:
         #     break
