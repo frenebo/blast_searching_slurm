@@ -28,7 +28,7 @@ if __name__ == "__main__":
     for idx, row in df.iterrows():
         genome_accession_id = str(row["Assembly"])
         # if genome_accession_id
-        print("{idx}/{rowcount} ".format(idx=idx,rowcount=len(df.index)), end="")
+        print("{idx}/{rowcount} ".format(idx=idx,rowcount=len(df.index)), end="",flush=True)
         if str(genome_accession_id) == 'nan':
             print(" (Skipping row, accession id missing)")
             continue
