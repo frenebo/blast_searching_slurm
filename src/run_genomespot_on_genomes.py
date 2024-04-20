@@ -178,7 +178,7 @@ def run_genomes_and_save_preds(
             "save_res_fp_prefix": save_res_fp_prefix,
         })
 
-        if idx > 100:
+        if idx > 500:
             break
     
     run_genomespot_slurmjobs(collected_info, genomespot_models_path, slurmjobs_dir)
