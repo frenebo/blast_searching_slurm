@@ -125,12 +125,12 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 100
-    nthreads = 28
+    genomes_per_job = 500
+    nthreads = 10
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
-    timestr_per_job = "00:20:00"
+    timestr_per_job = "00:10:00"
     jobmemory="8G" # Need about 500 mb per thread
 
     for i in range(math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)):
@@ -225,8 +225,8 @@ def run_genomes_and_save_preds(
             "save_res_fp_prefix": save_res_fp_prefix,
         })
 
-        if idx >= 99:
-            break
+        # if idx >= 99:
+        #     break
     
     run_genomespot_slurmjobs(collected_info, genomespot_models_path, slurmjobs_dir)
 
