@@ -41,7 +41,7 @@ def download_genomes(source_summary_tsv, genome_data_dir, record_fhandle):
 
         record_f.write("{}\t{}\t{}\n".format(genome_accession_id, catalog_json_fp, assembly_data_json_fp))
         record_f.flush()
-        os.fsync()
+        os.fsync(record_f)
 
 
 
