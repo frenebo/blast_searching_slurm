@@ -5,11 +5,12 @@ import json
 import pandas as pd
 import subprocess
 
-def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jobname, timestring, ntasks, memorystring):
+def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jobname, timestring, ncpus, memorystring):
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={jobname}\n".format(jobname=jobname) +\
         "#SBATCH --nodes=1\n" +\
-        "#SBATCH --ntasks={ntasks}\n".format(ntasks) +\
+        "#SBATCH --ntasks=1\n" +\
+        "#SBATCH --cpus-per-task={}\n".format(ncpus) +\
         "#SBATCH --mem={memorystring}\n".format(memorystring=memorystring) +\
         "#SBATCH --time={timestring}\n".format(timestring=timestring) +\
         "#SBATCH --mail-type=begin\n" +\
