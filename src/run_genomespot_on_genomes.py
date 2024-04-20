@@ -97,7 +97,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
 
 
 
-def run_genomes_and_save_preds_to_file(genome_info_tsv, results_save_dir, genomespot_models_path, slurmjobs_dir):
+def run_genomes_and_save_preds(genome_info_tsv, results_save_dir, genomespot_models_path, slurmjobs_dir):
     genome_info_df = pd.read_csv(genome_info_tsv, sep="\t")
 
     os.makedirs(results_save_dir, exist_ok=True)
