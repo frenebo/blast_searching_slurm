@@ -86,8 +86,8 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         )
         do_genomespot += " & \n"
 
-        if (idx + 1) % ncpus == 0:
-            do_genomespot += "wait\n"
+        # if (idx + 1) % ncpus == 0:
+        #     do_genomespot += "wait\n"
 
     do_genomespot += "wait\n"
     
@@ -126,7 +126,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # 10 minute jobs with 30 genomes each
 
     genomes_per_job = 100
-    nthreads = 10
+    nthreads = 28
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
