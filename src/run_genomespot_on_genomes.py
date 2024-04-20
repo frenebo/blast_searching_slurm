@@ -33,7 +33,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     for infoline in genomes_and_protein_info_for_job:
         saveresfp_prefix = infoline["save_res_fp_prefix"]
         
-        orig_genome_fp = infoline["genome_fasta_fp"]
+        orig_genome_fp = infoline["genomic_nucleotide_fasta_fp"]
         new_genome_fp = os.path.join(scratch_dir, saveresfp_prefix + "_genomicdata.faa")
         copy_to_scratch += "cp {} {}".format(orig_genome_fp, new_genome_fp)
 
@@ -41,7 +41,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         new_protein_fp = os.path.join(scratch_dir, saveresfp_prefix + "_proteindata.fna")
         copy_to_scratch += "cp {} {}".format(orig_protein_fp, new_protein_fp)
 
-        infoline["genome_fasta_fp"] = new_genome_fp
+        infoline["genomic_nucleotide_fasta_fp"] = new_genome_fp
         infoline["protein_fasta_fp"] = new_protein_fp
 
 
