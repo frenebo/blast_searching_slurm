@@ -139,11 +139,11 @@ def run_genomes_and_save_preds_to_file(genome_info_tsv, results_save_dir, genome
         
         save_res_fp_prefix = os.path.join(results_save_dir, genome_accession_id)
 
-        collected_info.append([
+        collected_info.append({
             "genomic_nucleotide_fasta_fp": genomic_nucleotide_fasta_fp,
             "protein_fasta_fp": protein_fasta_fp,
             "save_res_fp_prefix": save_res_fp_prefix,
-        ])
+        })
 
         if idx > 100:
             break
