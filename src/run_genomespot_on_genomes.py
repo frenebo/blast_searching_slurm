@@ -86,8 +86,8 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         )
         do_genomespot += " & \n"
 
-        # if (idx + 1) % ncpus == 0:
-        #     do_genomespot += "wait\n"
+        if (idx + 1) % ncpus == 0:
+            do_genomespot += "wait\n"
 
     do_genomespot += "wait\n"
     
@@ -125,15 +125,19 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 50
+    genomes_per_job = 1000
     nthreads = 10
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
-    timestr_per_job = "00:01:00"
+    timestr_per_job = "00:25:00"
     jobmemory="8G" # Need about 500 mb per thread
 
-    for i in range(math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)):
+    n_jobs = math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)
+    if n_jobs > 100:
+        raise Exception("Will need too many jobs (>100): {}".format(n_jobs))
+
+    for i in range(n_jobs):
         start_idx = i * genomes_per_job
         end_idx = (i + 1) * genomes_per_job
 
@@ -173,7 +177,8 @@ def run_genomes_and_save_preds(
     collected_info = []
     # genome_info_df
     for idx,row in genome_info_df.iterrows():
-        print("{}/{} ".format(idx+1,len(genome_info_df.index)),end="",flush=True)
+        if idx % 100 == 0 or idx == len(genome_info_df.index) - 1:
+            print("{}/{} ".format(idx+1,len(genome_info_df.index)),end="",flush=True)
 
         genome_accession_id = str(row["genome_accession"])
 
