@@ -23,8 +23,10 @@ if __name__ == "__main__":
 
     df = pd.read_csv(args.source_summary_tsv, sep="\t")
 
+
+
     for idx, row in df.iterrows():
-        genome_accession_id = row["Assembly"]
+        genome_accession_id = str(row["Assembly"])
 
         request_url = (r"https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/" +
             r"{}/download?include_annotation_type=GENOME_FASTA&include_annotation_type=GENOME_GFF&".format(genome_accession_id) +
@@ -59,6 +61,6 @@ if __name__ == "__main__":
 
 
         # break
-        # if idx > 20:
-        #     break
+        if idx > 500:
+            break
 
