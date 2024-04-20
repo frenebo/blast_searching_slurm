@@ -23,7 +23,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         "module load anaconda3/2024.2\n" +\
         "conda activate genomespotstuff\n"
     
-    starting_copying_timestamp = "echo 'starting copying'\ndata\n"
+    starting_copying_timestamp = "echo 'starting copying'\ndate\n"
     
     
     copy_to_scratch = ""
