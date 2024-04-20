@@ -27,6 +27,12 @@ if __name__ == "__main__":
 
     for idx, row in df.iterrows():
         genome_accession_id = str(row["Assembly"])
+        # if genome_accession_id
+        print("{idx}/{rowcount} ".format(idx=idx,rowcount=len(df.index)), end="")
+        if str(genome_accession_id) == 'nan':
+            print(" (Skipping row, accession id missing)")
+            continue
+        # str(df.at[index, 'column']) == 'nan'
 
         request_url = (r"https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/" +
             r"{}/download?include_annotation_type=GENOME_FASTA&include_annotation_type=GENOME_GFF&".format(genome_accession_id) +
@@ -37,11 +43,11 @@ if __name__ == "__main__":
         zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
         accession_data_dir = os.path.join(args.genome_data_dir, genome_accession_id + "_genomedata")
         os.makedirs(accession_data_dir, exist_ok=True)
-        print("{idx}/{rowcount} - downloading {request_url} to {zip_file_path}".format(
-            idx=idx,
-            rowcount=len(df.index),
-            request_url=request_url,
-            zip_file_path=zip_file_path))
+        # print("{idx}/{rowcount} - downloading {request_url} to {zip_file_path}".format(
+        #     idx=idx,
+        #     rowcount=len(df.index),
+        #     request_url=request_url,
+        #     zip_file_path=zip_file_path))
 
         with requests.get(request_url, stream=True) as r:
             r.raise_for_status()
@@ -52,7 +58,7 @@ if __name__ == "__main__":
                     #if chunk: 
                     f.write(chunk)
 
-        print(" unzipping {} to {}".format(zip_file_path, accession_data_dir))
+        # print(" unzipping {} to {}".format(zip_file_path, accession_data_dir))
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(accession_data_dir)
         
