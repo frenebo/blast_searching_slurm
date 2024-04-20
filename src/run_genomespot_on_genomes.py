@@ -97,7 +97,12 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
 
 
 
-def run_genomes_and_save_preds(genome_info_tsv, results_save_dir, genomespot_models_path, slurmjobs_dir):
+def run_genomes_and_save_preds(
+    genome_info_tsv,
+    genomedata_absolute_dirpath,
+    results_save_dir,
+    genomespot_models_path,
+    slurmjobs_dir):
     genome_info_df = pd.read_csv(genome_info_tsv, sep="\t")
 
     os.makedirs(results_save_dir, exist_ok=True)
@@ -137,6 +142,18 @@ def run_genomes_and_save_preds(genome_info_tsv, results_save_dir, genomespot_mod
         if genomic_nucleotide_fasta_fp is None or protein_fasta_fp is None:
             raise Exception("Could not find protein and genome nucleotide fasta data in {}".format(row["catalog_json_fp"]))
         
+        # Get absolute paths where the filepaths will be inside
+        # For example /scratch/gpfs/pk5192/April20_MtrCgenomes/GCF_030008505.1_genomedata/ncbi_dataset/data/
+        absolute_data_parent_dirpath = os.path.join(
+            genomedata_absolute_dirpath,
+            genome_accession_id + "_genomedata",
+            "ncbi_dataset",
+            "data",
+            )
+        
+        genomic_nucleotide_fasta_fp = os.path.join(absolute_data_parent_dirpath, genomic_nucleotide_fasta_fp)
+        protein_fasta_fp = os.path.join(absolute_data_parent_dirpath, protein_fasta_fp)
+        
         save_res_fp_prefix = os.path.join(results_save_dir, genome_accession_id)
 
         collected_info.append({
@@ -157,6 +174,7 @@ def main():
         prog="Run genome spot from given tsv of genome data stuff",
     )
     parser.add_argument("source_genomepath_tsv", help="Path to the tab separated value file containing genome json info from ncbi")
+    parser.add_argument("pathto_genomedata_rootdir", help="Path to the directory with all of the genomes and their downloaded ncbi sequences")
     parser.add_argument("result_save_dir", help="Directory to put results for the genome predictions")
     parser.add_argument("genomespot_models_path", help="Path to GenomeSPOT's models directory")
     parser.add_argument("slurmjobs_dir", help="Directory to store the slurm job files while running")
@@ -168,7 +186,12 @@ def main():
     # if not args.result_save_tsv.endswith(".tsv"):
     #     raise Exception("Expect?ed result save tsv filepath to end in .tsv")
     
-    run_genomes_and_save_preds(args.source_genomepath_tsv, args.result_save_dir, args.genomespot_models_path, args.slurmjobs_dir)
+    run_genomes_and_save_preds(
+        args.source_genomepath_tsv,
+        args.pathto_genomedata_rootdir,
+        args.result_save_dir,
+        args.genomespot_models_path,
+        args.slurmjobs_dir)
     # with open(args.result_save_tsv, "w") as result_file:
     #     run_genomes_and_save_preds_to_file(args.source_genomepath_tsv, result_file)
     
