@@ -33,12 +33,12 @@ if __name__ == "__main__":
 
         zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
 
-        zipfile_data = requests.get(request_url)
+        # zipfile_data = requests.get(request_url)
             
         # NOTE the stream=True parameter below
         with requests.get(request_url, stream=True) as r:
             r.raise_for_status()
-            with open(zipfile_data, 'wb') as f:
+            with open(zip_file_path, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=8192): 
                     # If you have chunk encoded response uncomment if
                     # and set chunk_size parameter to None.
