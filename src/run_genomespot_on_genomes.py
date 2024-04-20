@@ -17,7 +17,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         "\n"
     
     
-    tellbash_echo_commands = "set -x\n"
+    # tellbash_echo_commands = "set -x\n"
     
     module_setup = "module purge\n" +\
         "module load anaconda3/2024.2\n" +\
@@ -43,6 +43,8 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
 
         infoline["genomic_nucleotide_fasta_fp"] = new_genome_fp
         infoline["protein_fasta_fp"] = new_protein_fp
+    
+    finished_copying_timestamp = "echo 'finished copying'\ndata\n"
 
 
     
@@ -84,7 +86,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
     
-    return slurm_setup + tellbash_echo_commands + copy_to_scratch + module_setup + start_timestamp + do_genomespot + end_timestamp
+    return slurm_setup + copy_to_scratch + finished_copying_timestamp + module_setup + start_timestamp + do_genomespot + end_timestamp
     
 
 def start_slurm_job(slurmfile_path):
