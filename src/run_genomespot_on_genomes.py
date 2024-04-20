@@ -28,7 +28,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     do_genomespot = ""
     # slurmjob_text = slurm_setup
     
-    for infoline in genome_and_proteins_and_save_infos:
+    for infoline in genomes_and_protein_info_for_job:
         genome_fasta_fp = infoline["genomic_nucleotide_fasta_fp"]
         protein_fasta_fp = infoline["protein_fasta_fp"]
         output_fp_without_predictions_tsv = infoline["save_res_fp_prefix"]
