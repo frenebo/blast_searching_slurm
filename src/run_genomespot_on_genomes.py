@@ -30,7 +30,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
 
     # Copy the relevant data into a temp dir
     scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
-    copy_to_scratch += "mkdir '{}'\n".format(scratch_dir)
+    copy_to_scratch += "mkdir -p '{}'\n".format(scratch_dir)
     # os.makedirs(scratch_dir, exist_ok=True)
     for infoline in genomes_and_protein_info_for_job:
         genome_accession_id = infoline["genome_accession_id"]
