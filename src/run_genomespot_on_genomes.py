@@ -132,8 +132,8 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     jobmemory="2G" # Need about 500 mb per thread
 
     n_jobs = math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)
-    if n_jobs > 100:
-        raise Exception("Will need too many jobs (>100): {}".format(n_jobs))
+    if n_jobs > 1000:
+        raise Exception("Will need too many jobs (>1000): {}".format(n_jobs))
 
     for i in range(n_jobs):
         start_idx = i * genomes_per_job
