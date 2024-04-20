@@ -34,7 +34,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         output_fp_without_predictions_tsv = infoline["save_res_fp_prefix"]
 
         do_genomespot +=(
-            "python -m genome_spot.genome_spot --models {genomespot_models_path} ".format(genomespot_models_path) +
+            "python -m genome_spot.genome_spot --models {genomespot_models_path} ".format(genomespot_models_path=genomespot_models_path) +
             " --contigs {genome_fasta_fp} ".format(genome_fasta_fp=genome_fasta_fp) + 
             " --proteins {protein_fasta_path} ".format(protein_fasta_path=protein_fasta_fp) + 
             " --output {outputname} ".format(outputname=output_fp_without_predictions_tsv)
