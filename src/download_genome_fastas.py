@@ -35,6 +35,11 @@ if __name__ == "__main__":
         zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
         accession_data_dir = os.path.join(args.genome_data_dir, genome_accession_id + "_genomedata")
         os.makedirs(accession_data_dir, exist_ok=True)
+        print("{idx}/{rowcount} - downloading {request_url} to {zip_file_path}".format(
+            idx=idx,
+            rowcount=len(df.index),
+            request_url=request_url,
+            zip_file_path=zip_file_path))
 
         with requests.get(request_url, stream=True) as r:
             r.raise_for_status()
@@ -45,7 +50,7 @@ if __name__ == "__main__":
                     #if chunk: 
                     f.write(chunk)
 
-            
+        print(" unzipping {} to {}")
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(accession_data_dir)
         
