@@ -27,33 +27,33 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     starting_copying_timestamp = "echo 'starting copying'\ndate\n"
     
     
-    copy_to_scratch = ""
+    # copy_to_scratch = ""
 
-    # Copy the relevant data into a temp dir
-    scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
-    copy_to_scratch += "mkdir -p '{}'\n".format(scratch_dir)
+    # # Copy the relevant data into a temp dir
+    # scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
+    # copy_to_scratch += "mkdir -p '{}'\n".format(scratch_dir)
 
-    # Copy models to temp
-    new_genomespot_models_path = os.path.join(scratch_dir, "genomespot_models")
-    copy_to_scratch += "cp -r '{}' '{}'".format(genomespot_models_path, new_genomespot_models_path)
+    # # Copy models to temp
+    # new_genomespot_models_path = os.path.join(scratch_dir, "genomespot_models")
+    # copy_to_scratch += "cp -r '{}' '{}'".format(genomespot_models_path, new_genomespot_models_path)
 
-    genomespot_models_path = new_genomespot_models_path
+    # genomespot_models_path = new_genomespot_models_path
     
 
-    # Copy relevant genomes
-    for infoline in genomes_and_protein_info_for_job:
-        genome_accession_id = infoline["genome_accession_id"]
+    # # Copy relevant genomes
+    # for infoline in genomes_and_protein_info_for_job:
+    #     genome_accession_id = infoline["genome_accession_id"]
         
-        orig_genome_fp = infoline["genomic_nucleotide_fasta_fp"]
-        new_genome_fp = os.path.join(scratch_dir, genome_accession_id + "_genomicdata.faa")
-        copy_to_scratch += "cp '{}' '{}'\n".format(orig_genome_fp, new_genome_fp)
+    #     orig_genome_fp = infoline["genomic_nucleotide_fasta_fp"]
+    #     new_genome_fp = os.path.join(scratch_dir, genome_accession_id + "_genomicdata.faa")
+    #     copy_to_scratch += "cp '{}' '{}'\n".format(orig_genome_fp, new_genome_fp)
 
-        orig_protein_fp = infoline["protein_fasta_fp"]
-        new_protein_fp = os.path.join(scratch_dir, genome_accession_id + "_proteindata.fna")
-        copy_to_scratch += "cp '{}' '{}'\n".format(orig_protein_fp, new_protein_fp)
+    #     orig_protein_fp = infoline["protein_fasta_fp"]
+    #     new_protein_fp = os.path.join(scratch_dir, genome_accession_id + "_proteindata.fna")
+    #     copy_to_scratch += "cp '{}' '{}'\n".format(orig_protein_fp, new_protein_fp)
 
-        infoline["genomic_nucleotide_fasta_fp"] = new_genome_fp
-        infoline["protein_fasta_fp"] = new_protein_fp
+    #     infoline["genomic_nucleotide_fasta_fp"] = new_genome_fp
+    #     infoline["protein_fasta_fp"] = new_protein_fp
     
 
 
@@ -96,7 +96,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
     
-    return slurm_setup + starting_copying_timestamp + copy_to_scratch + module_setup + start_timestamp + do_genomespot + end_timestamp
+    return slurm_setup + starting_copying_timestamp + module_setup + start_timestamp + do_genomespot + end_timestamp
     
 
 def start_slurm_job(slurmfile_path):
