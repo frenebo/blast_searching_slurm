@@ -123,7 +123,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 200
+    genomes_per_job = 250
     nthreads = 1
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
