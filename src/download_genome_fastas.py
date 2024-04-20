@@ -1,5 +1,6 @@
 # from Bio import Entrez
 import argparse
+import zipfile
 import requests
 import os
 import pandas as pd
@@ -32,10 +33,9 @@ if __name__ == "__main__":
 
 
         zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
+        accession_data_dir = os.path.join(args.genome_data_dir, genome_accession_id + "_unzipped")
+        os.makedirs(accession_data_dir, exist_ok=True)
 
-        # zipfile_data = requests.get(request_url)
-            
-        # NOTE the stream=True parameter below
         with requests.get(request_url, stream=True) as r:
             r.raise_for_status()
             with open(zip_file_path, 'wb') as f:
@@ -44,8 +44,10 @@ if __name__ == "__main__":
                     # and set chunk_size parameter to None.
                     #if chunk: 
                     f.write(chunk)
-        # with open(zip_file_path, "w") as f:
-        #     f.write(zipfile_data)
 
+            
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+            zip_ref.extractall(accession_data_dir)
+        
         break
 
