@@ -146,7 +146,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
             f.write(jobfile_string)
 
         
-        # start_slurm_job(jobslurm_path)
+        start_slurm_job(jobslurm_path)
 
 
 
