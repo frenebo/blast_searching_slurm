@@ -9,7 +9,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={jobname}\n".format(jobname=jobname) +\
         "#SBATCH --nodes=1\n" +\
-        "#SBATCH --ntasks=1\n" +\
+        "#SBATCH --ntasks={ntasks}\n".format(ntasks) +\
         "#SBATCH --mem={memorystring}\n".format(memorystring=memorystring) +\
         "#SBATCH --time={timestring}\n".format(timestring=timestring) +\
         "#SBATCH --mail-type=begin\n" +\
@@ -31,7 +31,15 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     # Copy the relevant data into a temp dir
     scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
     copy_to_scratch += "mkdir -p '{}'\n".format(scratch_dir)
-    # os.makedirs(scratch_dir, exist_ok=True)
+
+    # Copy models to temp
+    new_genomespot_models_path = os.path.join(scratch_dir, "genomespot_models")
+    copy_to_scratch += "cp -r '{}' '{}'".format(genomespot_models_path, new_genomespot_models_path)
+
+    genomespot_models_path = new_genomespot_models_path
+    
+
+    # Copy relevant genomes
     for infoline in genomes_and_protein_info_for_job:
         genome_accession_id = infoline["genome_accession_id"]
         
