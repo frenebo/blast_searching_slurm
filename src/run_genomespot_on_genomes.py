@@ -105,7 +105,7 @@ def run_genomes_and_save_preds(genome_info_tsv, results_save_dir, genomespot_mod
 
     collected_info = []
     # genome_info_df
-    for row, idx in genome_info_df.iterrows():
+    for idx,row in genome_info_df.iterrows():
         print("{}/{} ".format(idx+1,len(genome_info_df.index)),end="",flush=True)
 
         genome_accession_id = str(row["genome_accession"])
