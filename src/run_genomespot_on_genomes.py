@@ -28,18 +28,18 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
 
     # Copy the relevant data into a temp dir
     scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
-    copy_to_scratch += "mkdir {}\n".format(scratch_dir)
+    copy_to_scratch += "mkdir '{}'\n".format(scratch_dir)
     # os.makedirs(scratch_dir, exist_ok=True)
     for infoline in genomes_and_protein_info_for_job:
         saveresfp_prefix = infoline["save_res_fp_prefix"]
         
         orig_genome_fp = infoline["genomic_nucleotide_fasta_fp"]
         new_genome_fp = os.path.join(scratch_dir, saveresfp_prefix + "_genomicdata.faa")
-        copy_to_scratch += "cp {} {}".format(orig_genome_fp, new_genome_fp)
+        copy_to_scratch += "cp '{}' '{}'\n".format(orig_genome_fp, new_genome_fp)
 
         orig_protein_fp = infoline["protein_fasta_fp"]
         new_protein_fp = os.path.join(scratch_dir, saveresfp_prefix + "_proteindata.fna")
-        copy_to_scratch += "cp {} {}".format(orig_protein_fp, new_protein_fp)
+        copy_to_scratch += "cp '{}' '{}'\n".format(orig_protein_fp, new_protein_fp)
 
         infoline["genomic_nucleotide_fasta_fp"] = new_genome_fp
         infoline["protein_fasta_fp"] = new_protein_fp
@@ -84,7 +84,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
     
-    return slurm_setup + tellbash_echo_commands + module_setup + start_timestamp + do_genomespot + end_timestamp
+    return slurm_setup + tellbash_echo_commands + copy_to_scratch + module_setup + start_timestamp + do_genomespot + end_timestamp
     
 
 def start_slurm_job(slurmfile_path):
