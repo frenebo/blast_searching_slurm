@@ -1,6 +1,7 @@
 # from Bio import Entrez
 import argparse
 import requests
+import os
 import pandas as pd
 
 if __name__ == "__main__":
