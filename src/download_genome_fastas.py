@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
 
         zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
-        accession_data_dir = os.path.join(args.genome_data_dir, genome_accession_id + "_unzipped")
+        accession_data_dir = os.path.join(args.genome_data_dir, genome_accession_id + "_genomedata")
         os.makedirs(accession_data_dir, exist_ok=True)
 
         with requests.get(request_url, stream=True) as r:
@@ -49,5 +49,7 @@ if __name__ == "__main__":
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(accession_data_dir)
         
-        break
+        # break
+        # if idx > 20:
+        #     break
 
