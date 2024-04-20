@@ -125,7 +125,7 @@ def run_genomes_and_save_preds(genome_info_tsv, results_save_dir, genomespot_mod
                 continue
             
             assert assem["accession"] == genome_accession_id
-            for fileentry in assem["accession"]["files"]:
+            for fileentry in assem["files"]:
                 if fileentry["fileType"] == "GENOMIC_NUCLEOTIDE_FASTA":
                     genomic_nucleotide_fasta_fp = fileentry["filePath"]
                 
