@@ -40,7 +40,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         )
         do_genomespot += " & \n"
 
-        if idx % ntasks == 0:
+        if (idx + 1) % ntasks == 0:
             do_genomespot += "wait\n"
 
     do_genomespot += "wait\n"
