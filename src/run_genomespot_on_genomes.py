@@ -128,7 +128,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
-    timestr_per_job = "00:25:00"
+    timestr_per_job = "00:40:00"
     jobmemory="8G" # Need about 500 mb per thread
 
     n_jobs = math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)
