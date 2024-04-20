@@ -31,7 +31,21 @@ if __name__ == "__main__":
             r"include_annotation_type=SEQUENCE_REPORT&hydrated=FULLY_HYDRATED")
 
 
-        r = requests.get(request_url)
+        zip_file_path = os.path.join(args.genome_data_dir, genome_accession_id + ".zip")
+
+        zipfile_data = requests.get(request_url)
+            
+        # NOTE the stream=True parameter below
+        with requests.get(request_url, stream=True) as r:
+            r.raise_for_status()
+            with open(zipfile_data, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192): 
+                    # If you have chunk encoded response uncomment if
+                    # and set chunk_size parameter to None.
+                    #if chunk: 
+                    f.write(chunk)
+        # with open(zip_file_path, "w") as f:
+        #     f.write(zipfile_data)
 
         break
 
