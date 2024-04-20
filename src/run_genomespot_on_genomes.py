@@ -5,12 +5,12 @@ import json
 import pandas as pd
 import subprocess
 
-def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jobname, timestring):
+def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jobname, timestring, ntasks, memorystring):
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={jobname}\n".format(jobname=jobname) +\
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks=1\n" +\
-        "#SBATCH --mem=10G\n" +\
+        "#SBATCH --mem={memorystring}\n".format(memorystring) +\
         "#SBATCH --time={timestring}\n".format(timestring=timestring) +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
@@ -20,15 +20,14 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
     
     module_setup = "module purge\n" +\
         "module load anaconda3/2024.2\n" +\
-        "conda activate mtrtest\n"
+        "conda activate genomespotstuff\n"
     
     start_timestamp = "echo 'start time'\n" +\
         "date\n"
     
     do_genomespot = ""
-    # slurmjob_text = slurm_setup
     
-    for infoline in genomes_and_protein_info_for_job:
+    for idx, infoline in enumerate(genomes_and_protein_info_for_job):
         genome_fasta_fp = infoline["genomic_nucleotide_fasta_fp"]
         protein_fasta_fp = infoline["protein_fasta_fp"]
         output_fp_without_predictions_tsv = infoline["save_res_fp_prefix"]
@@ -39,7 +38,12 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
             " --proteins {protein_fasta_path} ".format(protein_fasta_path=protein_fasta_fp) + 
             " --output {outputname} ".format(outputname=output_fp_without_predictions_tsv)
         )
-        do_genomespot += "\n"
+        do_genomespot += " & \n"
+
+        if idx % ntasks == 0:
+            do_genomespot += "wait\n"
+
+    do_genomespot += "wait\n"
     
     # do_genomespot += "\n"
 
@@ -75,8 +79,12 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 30
-    timestr_per_job = "00:10:00"
+    genomes_per_job = 100
+    nthreads = 10
+    # each batch will take about 6 seconds, so give some leeway
+    # (genomes_per_job/nthreads) * 6 seconds * safety factor
+    timestr_per_job = "00:3:00"
+    jobmemory="10G" # Need about 500 mb per thread
 
     for i in range(math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)):
         start_idx = i * genomes_per_job
@@ -86,14 +94,21 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
 
         job_genome_infos = genome_and_proteins_and_save_infos[start_idx:end_idx]
 
-        jobfile_string = build_slurm_job(job_genome_infos, genomespot_models_path, jobname, timestr_per_job)
+        jobfile_string = build_slurm_job(
+            job_genome_infos,
+            genomespot_models_path,
+            jobname,
+            timestr_per_job,
+            nthreads,
+            jobmemory,
+            )
         jobslurm_path = os.path.join(slurmjobs_dir, "{}.slurm".format(jobname))
 
         with open(jobslurm_path, "w") as f:
             f.write(jobfile_string)
 
         
-        start_slurm_job(jobslurm_path)
+        # start_slurm_job(jobslurm_path)
 
 
 
