@@ -16,12 +16,46 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         "#SBATCH --mail-type=end\n" +\
         "\n"
     
+    
     tellbash_echo_commands = "set -x\n"
     
     module_setup = "module purge\n" +\
         "module load anaconda3/2024.2\n" +\
         "conda activate genomespotstuff\n"
     
+    copy_to_scratch = ""
+    
+
+    # Copy the relevant data into a temp dir
+    scratch_dir = "/tmp/pk5192/{jobname}".format(jobname=jobname)
+    copy_to_scratch += "mkdir {}\n".format(scratch_dir)
+    # os.makedirs(scratch_dir, exist_ok=True)
+    for infoline in genomes_and_protein_info_for_job:
+        saveresfp_prefix = infoline["save_res_fp_prefix"]
+        
+        orig_genome_fp = infoline["genome_fasta_fp"]
+        new_genome_fp = os.path.join(scratch_dir, saveresfp_prefix + "_genomicdata.faa")
+        copy_to_scratch += "cp {} {}".format(orig_genome_fp, new_genome_fp)
+
+        orig_protein_fp = infoline["protein_fasta_fp"]
+        new_protein_fp = os.path.join(scratch_dir, saveresfp_prefix + "_proteindata.fna")
+        copy_to_scratch += "cp {} {}".format(orig_protein_fp, new_protein_fp)
+
+        infoline["genome_fasta_fp"] = new_genome_fp
+        infoline["protein_fasta_fp"] = new_protein_fp
+
+
+    
+    
+# ScratchDir="/tmp/myjob"  # create a name for the directory
+# mkdir -p ${ScratchDir}   # make the directory
+# ./myprog ${ScratchDir}   # run your program passing the directory path as a parameter
+
+    
+    # make_scratch_dir
+    
+    # ScratchDir="/tmp/myjob"  # create a name for the directory
+
     start_timestamp = "echo 'start time'\n" +\
         "date\n"
     
@@ -85,7 +119,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
     timestr_per_job = "00:20:00"
-    jobmemory="10G" # Need about 500 mb per thread
+    jobmemory="8G" # Need about 500 mb per thread
 
     for i in range(math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)):
         start_idx = i * genomes_per_job
@@ -109,7 +143,7 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
             f.write(jobfile_string)
 
         
-        start_slurm_job(jobslurm_path)
+        # start_slurm_job(jobslurm_path)
 
 
 
