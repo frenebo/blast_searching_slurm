@@ -10,7 +10,7 @@ def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jo
         "#SBATCH --job-name={jobname}\n".format(jobname=jobname) +\
         "#SBATCH --nodes=1\n" +\
         "#SBATCH --ntasks=1\n" +\
-        "#SBATCH --mem={memorystring}\n".format(memorystring) +\
+        "#SBATCH --mem={memorystring}\n".format(memorystring=memorystring) +\
         "#SBATCH --time={timestring}\n".format(timestring=timestring) +\
         "#SBATCH --mail-type=begin\n" +\
         "#SBATCH --mail-type=end\n" +\
