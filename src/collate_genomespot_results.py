@@ -22,7 +22,7 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
 
 def main():
     parser = argparse.ArgumentParser(
-        help="Takes a directory of genome spot results and collates them into a table",
+        prog="Takes a directory of genome spot results and collates them into a table",
     )
     parser.add_argument("source_directory_genomespot_results")
     parser.add_argument("output_tsv_file")
