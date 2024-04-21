@@ -21,7 +21,8 @@ def flatten_prediction_df_to_dict(pred_df, genome_accession):
         pred_dict[target + "_error"] = error
         pred_dict[target + "_is_novel"] = is_novel
         pred_dict[target + "_warning"] = warning
-
+    
+    return pred_dict
 
 
     """
@@ -39,6 +40,7 @@ def flatten_prediction_df_to_dict(pred_df, genome_accession):
     temperature_min 11.337712558738229      6.5935753513485995      C       False   None
     temperature_optimum     29.90546059538
     """
+    
 
 
 def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
@@ -51,7 +53,7 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
     for fname in tsv_files:
         fpath = os.path.join(source_dirpath, fname)
         accession = fname[:-len(".predictions.tsv")]
-        # print(fpath, accession)
+        print(fpath, accession)
         genome_preds_df = pd.read_csv(fpath, sep="\t")
         # print(genome_preds_df)
 
