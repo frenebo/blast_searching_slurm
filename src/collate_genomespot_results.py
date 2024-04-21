@@ -51,9 +51,9 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
     for fname in tsv_files:
         fpath = os.path.join(source_dirpath, fname)
         accession = fname[:-len(".predictions.tsv")]
-        print(fpath, accession)
+        # print(fpath, accession)
         genome_preds_df = pd.read_csv(fpath, sep="\t")
-        print(genome_preds_df)
+        # print(genome_preds_df)
 
         genome_flattened_preds = flatten_prediction_df_to_dict(
             pred_df=genome_preds_df,
