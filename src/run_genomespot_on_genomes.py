@@ -197,6 +197,7 @@ def run_genomes_and_save_preds(
     slurmjobs_dir,
     verbose=False):
     genome_info_df = pd.read_csv(genome_info_tsv, sep="\t")
+    print("Reading data from {}".format(genome_info_df))
 
     os.makedirs(results_save_dir, exist_ok=True)
     os.makedirs(slurmjobs_dir, exist_ok=True)
