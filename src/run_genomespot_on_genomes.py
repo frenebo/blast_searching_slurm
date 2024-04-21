@@ -5,7 +5,14 @@ import json
 import pandas as pd
 import subprocess
 
-def build_slurm_job(genomes_and_protein_info_for_job, genomespot_models_path, jobname, timestring, ncpus, memorystring):
+def build_slurm_job(
+    genomes_and_protein_info_for_job,
+    genomespot_models_path,
+    jobname,
+    timestring,
+    ncpus,
+    memorystring,
+    ):
     slurm_setup = "#!/bin/bash\n" +\
         "#SBATCH --job-name={jobname}\n".format(jobname=jobname) +\
         "#SBATCH --nodes=1\n" +\
@@ -119,17 +126,30 @@ def start_slurm_job(slurmfile_path):
         print("    ",end="")
         print(output[len(expected_prefix):])
 
-def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_models_path, slurmjobs_dir):
+def run_genomespot_slurmjobs(
+    genome_and_proteins_and_save_infos,
+    genomespot_models_path,
+    slurmjobs_dir,
+    verbose=False,
+    ):
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 250
+    # genomes_per_job = 750
+    genomes_per_job = 5
+    
+    # nthreads = 1
     nthreads = 1
+
     # each batch will take about 6 seconds, so give some leeway
     # (genomes_per_job/nthreads) * 6 seconds * safety factor
     # Try to give more time actually
-    timestr_per_job = "01:20:00"
-    jobmemory="2G" # Need about 500 mb per thread
+    
+    # timestr_per_job = "01:30:00"
+    timestr_per_job = "00:01:00"
+    
+    # jobmemory="2G" # Need about 500 mb per thread
+    jobmemory="1G"
 
     n_jobs = math.ceil(len(genome_and_proteins_and_save_infos) / genomes_per_job)
     if n_jobs > 1000:
@@ -142,21 +162,29 @@ def run_genomespot_slurmjobs(genome_and_proteins_and_save_infos, genomespot_mode
         jobname = "gsp{}".format(i)
 
         job_genome_infos = genome_and_proteins_and_save_infos[start_idx:end_idx]
+        if verbose:
+            print("Building slurm job for entries[{}:{}]".format(start_idx,end_idx))
+            print("    jobname: {}".format(jobname))
+            print("    time: {}".format(timestr_per_job))
+            print("    ncpus: {}".format(nthreads))
+            print("    memory: {}".format(jobmemory))
 
         jobfile_string = build_slurm_job(
-            job_genome_infos,
-            genomespot_models_path,
-            jobname,
-            timestr_per_job,
-            nthreads,
-            jobmemory,
+            genomes_and_protein_info_for_job=job_genome_infos,
+            genomespot_models_path=genomespot_models_path,
+            jobname=jobname,
+            timestring=timestr_per_job,
+            ncpus=nthreads,
+            memorystring=jobmemory,
             )
         jobslurm_path = os.path.join(slurmjobs_dir, "{}.slurm".format(jobname))
+
+        print("    Saving to {}".format(jobslurm_path))
 
         with open(jobslurm_path, "w") as f:
             f.write(jobfile_string)
 
-        
+        print("    Starting job")
         start_slurm_job(jobslurm_path)
 
 
@@ -166,17 +194,22 @@ def run_genomes_and_save_preds(
     genomedata_absolute_dirpath,
     results_save_dir,
     genomespot_models_path,
-    slurmjobs_dir):
+    slurmjobs_dir,
+    verbose=False):
     genome_info_df = pd.read_csv(genome_info_tsv, sep="\t")
 
     os.makedirs(results_save_dir, exist_ok=True)
     os.makedirs(slurmjobs_dir, exist_ok=True)
 
     collected_info = []
-    # genome_info_df
+    
     for idx,row in genome_info_df.iterrows():
-        if idx % 100 == 0 or idx == len(genome_info_df.index) - 1:
+        if verbose or idx % 100 == 0 or idx == len(genome_info_df.index) - 1:
+            if verbose:
+                print("Getting data for genome ",end="")
             print("{}/{} ".format(idx+1,len(genome_info_df.index)),end="",flush=True)
+            if verbose:
+                print("\n")
 
         genome_accession_id = str(row["genome_accession"])
 
@@ -221,6 +254,12 @@ def run_genomes_and_save_preds(
         
         save_res_fp_prefix = os.path.join(results_save_dir, genome_accession_id)
 
+        if verbose:
+            print("    genome accession: {}".format(genome_accession_id))
+            print("    genome fasta fp: {}".format(genomic_nucleotide_fasta_fp))
+            print("    protein fasta fp: {}".format(protein_fasta_fp))
+            print("    save result filepath prefix: {}".format(save_res_fp_prefix))
+
         collected_info.append({
             "genome_accession_id": genome_accession_id,
             "genomic_nucleotide_fasta_fp": genomic_nucleotide_fasta_fp,
@@ -228,10 +267,15 @@ def run_genomes_and_save_preds(
             "save_res_fp_prefix": save_res_fp_prefix,
         })
 
-        # if idx >= 99:
-        #     break
+        if idx >= 20:
+            break
     
-    run_genomespot_slurmjobs(collected_info, genomespot_models_path, slurmjobs_dir)
+    run_genomespot_slurmjobs(
+        genome_and_proteins_and_save_infos=collected_info,
+        genomespot_models_path=genomespot_models_path,
+        slurmjobs_dir=slurmjobs_dir,
+        verbose=verbose,
+        )
 
 
 
@@ -244,6 +288,7 @@ def main():
     parser.add_argument("result_save_dir", help="Directory to put results for the genome predictions")
     parser.add_argument("genomespot_models_path", help="Path to GenomeSPOT's models directory")
     parser.add_argument("slurmjobs_dir", help="Directory to store the slurm job files while running")
+    parser.add_argument("--verbose",action="store_true", help="Use this option to output more details")
 
     args = parser.parse_args()
 
@@ -253,13 +298,12 @@ def main():
     #     raise Exception("Expect?ed result save tsv filepath to end in .tsv")
     
     run_genomes_and_save_preds(
-        args.source_genomepath_tsv,
-        args.pathto_genomedata_rootdir,
-        args.result_save_dir,
-        args.genomespot_models_path,
-        args.slurmjobs_dir)
-    # with open(args.result_save_tsv, "w") as result_file:
-    #     run_genomes_and_save_preds_to_file(args.source_genomepath_tsv, result_file)
+        genome_info_tsv=args.source_genomepath_tsv,
+        genomedata_absolute_dirpath=args.pathto_genomedata_rootdir,
+        results_save_dir=args.result_save_dir,
+        genomespot_models_path=args.genomespot_models_path,
+        slurmjobs_dir=args.slurmjobs_dir,
+        verbose=args.verbose)
     
 
 
