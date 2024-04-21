@@ -76,6 +76,7 @@ def get_protein_info_from_entrez(prot_accessions):
 
             
         output_tsv_string += "\n".join(lines) + "\n"
+
     
     return output_tsv_string
         # print(text_response)
@@ -115,7 +116,7 @@ if __name__ == "__main__":
                 continue
             
             refs_for_protseq_match = line_vals[3]
-            cnt = 0
+            # cnt = 0
             for protref in refs_for_protseq_match.split(";"):
                 prot_accession = protref.split("|")[1]
                 # print(prot_accession)

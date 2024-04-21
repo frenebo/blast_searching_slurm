@@ -9,8 +9,6 @@ def download_genomes(source_summary_tsv, genome_data_dir, record_fhandle):
     os.makedirs(args.genome_data_dir, exist_ok=True)
     full_protein_df = pd.read_csv(args.source_summary_tsv, sep="\t")
 
-    # assemblies_to_download = list()
-
     print("Removing duplicate genome names")
     nonredundant_df = full_protein_df.drop_duplicates("Assembly")
 

@@ -55,7 +55,6 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
         accession = fname[:-len(".predictions.tsv")]
         print(fpath, accession)
         genome_preds_df = pd.read_csv(fpath, sep="\t")
-        # print(genome_preds_df)
 
         genome_flattened_preds = flatten_prediction_df_to_dict(
             pred_df=genome_preds_df,
@@ -67,10 +66,6 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
 
     result_df.to_csv(result_tsv_fp, sep="\t")
 
-    # tsv
-
-
-    # pass
 
 def main():
     parser = argparse.ArgumentParser(
@@ -87,9 +82,6 @@ def main():
     read_directory_files_and_save_results(
         source_dirpath=args.source_directory_genomespot_results,
         result_tsv_fp=args.output_tsv_file)
-
-    # if args
-    # os
 
 
 if __name__ == "__main__":
