@@ -270,7 +270,7 @@ def run_genomes_and_save_preds(
             "save_res_fp_prefix": save_res_fp_prefix,
         })
 
-        if idx >= 9:
+        if idx >= 4:
             break
     
     run_genomespot_slurmjobs(
