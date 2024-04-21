@@ -135,10 +135,10 @@ def run_genomespot_slurmjobs(
     # Actual time is about 5 seconds per genome - give it maybe 20 per genome to be on the safe side?
     # 10 minute jobs with 30 genomes each
 
-    genomes_per_job = 1000
+    genomes_per_job = 300
     # genomes_per_job = 5
     
-    nthreads = 3
+    nthreads = 1
     # nthreads = 1
 
     # each batch will take about 6 seconds, so give some leeway
