@@ -122,12 +122,7 @@ if __name__ == "__main__":
                 # print(prot_accession)
                 prot_accessions_to_search.append(prot_accession)
                 # break
-                # cnt += 1
-                # if cnt > 2:
-                #     break
-            # prot_accessions_to_search
-            # print(refs_for_protseq_match.split(";"))
-            # break
+                
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
     prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
