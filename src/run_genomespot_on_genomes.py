@@ -29,7 +29,7 @@ def build_slurm_job(
         "module load anaconda3/2024.2\n" +\
         "conda activate genomespotstuff\n"
     
-    starting_copying_timestamp = "echo 'starting copying'\ndate\n"
+    # starting_copying_timestamp = "echo 'starting copying'\ndate\n"
     
     
     # copy_to_scratch = ""
@@ -101,7 +101,7 @@ def build_slurm_job(
     end_timestamp = "echo 'end time'\n" +\
         "date\n"
     
-    return slurm_setup + starting_copying_timestamp + module_setup + start_timestamp + do_genomespot + end_timestamp
+    return slurm_setup + module_setup + start_timestamp + do_genomespot + end_timestamp
     
 
 def start_slurm_job(slurmfile_path):
@@ -267,7 +267,7 @@ def run_genomes_and_save_preds(
             "save_res_fp_prefix": save_res_fp_prefix,
         })
 
-        if idx >= 20:
+        if idx >= 9:
             break
     
     run_genomespot_slurmjobs(
