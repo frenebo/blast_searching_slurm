@@ -210,6 +210,9 @@ def run_genomes_and_save_preds(
             print("{}/{} ".format(idx+1,len(genome_info_df.index)),end="",flush=True)
             if verbose:
                 print("\n")
+        
+        if verbose:
+            print(row)
 
         genome_accession_id = str(row["genome_accession"])
 
