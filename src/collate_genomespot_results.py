@@ -1,5 +1,6 @@
 import argparse
 import os
+import pandas as pd
 
 def read_genomespot_resultfile(filepath):
     pass
@@ -13,6 +14,8 @@ def read_directory_files_and_save_results(source_dirpath, result_tsv_fp):
         fpath = os.path.join(source_dirpath, fname)
         accession = fname[:-len(".predictions.tsv")]
         print(fpath, accession)
+        genome_preds_df = pd.read_csv(fpath, sep="\t")
+        print(genome_preds_df)
         # pred_suffix
 
     # tsv
@@ -28,6 +31,9 @@ def main():
     parser.add_argument("output_tsv_file")
 
     args = parser.parse_args()
+
+    if not args.output_tsv_file.endswith(".tsv"):
+        raise Exception("Expected '{}' to end with .tsv".format(args.output_tsv_file))
 
     read_directory_files_and_save_results(
         source_dirpath=args.source_directory_genomespot_results,
