@@ -7,12 +7,18 @@ import pandas as pd
 
 def download_genomes(source_summary_tsv, genome_data_dir, record_fhandle):
     os.makedirs(args.genome_data_dir, exist_ok=True)
-    df = pd.read_csv(args.source_summary_tsv, sep="\t")
+    full_protein_df = pd.read_csv(args.source_summary_tsv, sep="\t")
 
-    for idx, row in df.iterrows():
+    # assemblies_to_download = list()
+
+    print("Removing duplicate genome names")
+    nonredundant_df = full_protein_df.drop_duplicates("Assembly")
+
+
+    for idx, row in nonredundant_df.iterrows():
         genome_accession_id = str(row["Assembly"])
         
-        print("{idx}/{rowcount} ".format(idx=idx+1,rowcount=len(df.index)), end="",flush=True)
+        print("{idx}/{rowcount} ".format(idx=idx+1,rowcount=len(nonredundant_df.index)), end="",flush=True)
         if str(genome_accession_id) == 'nan':
             print(" (Skipping row, accession id missing)")
             continue
