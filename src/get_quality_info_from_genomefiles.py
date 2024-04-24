@@ -130,6 +130,7 @@ def get_info_from_data_report(ass_data_rep_path):
             json_contents = json.load(f)
     except:
         genome_data["datafileunreadable"] = True
+        raise
         return genome_data
 
     genome_data["datafileunreadable"] = False
