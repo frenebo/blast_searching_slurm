@@ -116,7 +116,7 @@ def get_info_from_data_report(ass_data_rep_path):
 
     genome_data = make_flattened_obj(expected_structure)
     genome_data["datafilemissing"] = None
-    genome_data["datafileunreadable"] = None
+    # genome_data["datafileunreadable"] = None
 
     if not os.path.exists(ass_data_rep_path):
         genome_data["datafilemissing"] = True
@@ -126,15 +126,11 @@ def get_info_from_data_report(ass_data_rep_path):
     
     # else:
     json_contents = None
-    try:
-        with open(ass_data_rep_path, "r") as f:
-            json_contents = json.load(f)
-    except:
-        genome_data["datafileunreadable"] = True
-        raise
-        return genome_data
+    with open(ass_data_rep_path, "r") as f:
+        json_contents = json.load(f)
+        # return genome_data
 
-    genome_data["datafileunreadable"] = False
+    # genome_data["datafileunreadable"] = False
     
     flattened_data_report = make_flattened_obj(json_contents)
 

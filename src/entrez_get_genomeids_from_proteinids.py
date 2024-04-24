@@ -10,12 +10,14 @@ def search_proteins_in_entrez(all_prot_accession_ids):
     proteins_not_found_in_database = []
 
     # Split requests into groups of 1000
-    group_search_size = 1000
+    group_search_size = 1
     for i in range(math.ceil(len(all_prot_accession_ids) / group_search_size)):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
         if end_idx >= len(all_prot_accession_ids):
             end_idx = len(all_prot_accession_ids)
+        
+
         print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
         
         prot_search_group = all_prot_accession_ids[start_idx : end_idx]
@@ -31,15 +33,19 @@ def search_proteins_in_entrez(all_prot_accession_ids):
             for xml_notfoundphrase in xml_errlist.findall("PhraseNotFound"):
                 missing_protein_accession = xml_notfoundphrase.text
                 proteins_not_found_in_database.append(missing_protein_accession)
+            
+        
                 
     proteins_present_in_db = [acc for acc in all_prot_accession_ids if (acc not in proteins_not_found_in_database)]
 
     return proteins_present_in_db
 
 
-def get_protein_info_from_entrez(prot_accessions):
-    group_search_size = 500
+def get_protein_info_from_entrez(prot_accessions, one_by_one_output_file):
+    group_search_size = 1
     output_tsv_string = ""
+
+    # one_by_one_output_file.write("orig prot accession\n")
     for i in range(math.ceil(len(prot_accessions) / group_search_size)):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
@@ -48,11 +54,16 @@ def get_protein_info_from_entrez(prot_accessions):
         
         print("Getting info for proteins {}-{}".format(start_idx,end_idx-1))
         search_prots = prot_accessions[start_idx:end_idx]
+        
+        one_by_one_output_file.write("=============================")
+        one_by_one_output_file.write(search_prots[0] + "\n")
         html_response = Entrez.efetch(db="protein", id=",".join(search_prots), rettype='ipg', retmode='text')
         text_response = html_response.read().decode("utf-8")
         
         
         lines = text_response.split("\n")
+        for l in lines:
+            one_by_one_output_file.write(l + "\n")
         
         # Remove extra header if this is the first request
         if i != 0:
@@ -83,6 +94,7 @@ if __name__ == "__main__":
     parser.add_argument("source_blast_tsv")
     parser.add_argument("output_efetch_tsv")
     parser.add_argument("entrez_email")
+    parser.add_argument("one_by_one_output")
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
@@ -110,10 +122,11 @@ if __name__ == "__main__":
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
-    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
+        prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
-    restext = get_protein_info_from_entrez(prot_accession_presentindb)
+    with open(args.one_by_one_output, "w") as onebyonefile:
+    restext = get_protein_info_from_entrez(prot_accession_presentindb, , onebyonefile)
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
     

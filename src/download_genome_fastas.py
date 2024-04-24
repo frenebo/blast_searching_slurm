@@ -66,8 +66,6 @@ if __name__ == "__main__":
         raise Exception("Expected tsv file here")
     
 
-    # df = 
-
     with open(args.download_record_tsv, "w") as record_f:
         record_f.write("genome_accession\tcatalog_json_fp\tassembly_data_json_fp\n")
     
