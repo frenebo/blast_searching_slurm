@@ -106,8 +106,8 @@ def get_info_from_data_report(ass_data_rep_path):
             "contamination": None,
         },
         "organism": {
-            "organismName": None
-            "taxId": None
+            "organismName": None,
+            "taxId": None,
         },
         "sourceDatabase": None,
     }
