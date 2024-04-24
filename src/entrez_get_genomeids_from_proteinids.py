@@ -8,6 +8,7 @@ import math
 
 def search_proteins_in_entrez(all_prot_accession_ids):
     proteins_not_found_in_database = []
+
     # Split requests into groups of 1000
     group_search_size = 1000
     for i in range(math.ceil(len(all_prot_accession_ids) / group_search_size)):
@@ -20,11 +21,9 @@ def search_proteins_in_entrez(all_prot_accession_ids):
         prot_search_group = all_prot_accession_ids[start_idx : end_idx]
         http_response = Entrez.esearch("protein", ",".join(prot_search_group))
         text_response = http_response.read().decode('utf-8')
-        # print(prot_search_group)
-        # print(text_response)
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
-        # xml_resp.getroot().
+
         xml_errlist = xml_resp.find("ErrorList")
         if xml_errlist is None:
             continue
@@ -32,13 +31,10 @@ def search_proteins_in_entrez(all_prot_accession_ids):
             for xml_notfoundphrase in xml_errlist.findall("PhraseNotFound"):
                 missing_protein_accession = xml_notfoundphrase.text
                 proteins_not_found_in_database.append(missing_protein_accession)
-                # print(xml_notfoundphrase.text)
-    
+                
     proteins_present_in_db = [acc for acc in all_prot_accession_ids if (acc not in proteins_not_found_in_database)]
 
     return proteins_present_in_db
-
-        # break
 
 
 def get_protein_info_from_entrez(prot_accessions):
@@ -79,29 +75,18 @@ def get_protein_info_from_entrez(prot_accessions):
 
     
     return output_tsv_string
-        # print(text_response)
-        # break
-        # text_respo
-        # print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
-        
-
-    # Entrez.efetch(db="protein", id=prot_accessions.join(","))
-# "/home/pk5192/Documents/blast_searching_slurm/data"
-
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-                    prog='blasttsv_get_ipg_table',
                     description="Take the tsv output from the blast and use eutils to get source info"
     )
     parser.add_argument("source_blast_tsv")
-    # parser.add_argument("intermediate_prot_accession_file")
     parser.add_argument("output_efetch_tsv")
     parser.add_argument("entrez_email")
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
-    # if args.intermediate_prot_accession_file[-4:] != ".txt":
-    #     raise Exception("expected txt file!")
+        
     elif args.output_efetch_tsv[-4:] != ".tsv":
         raise Exception("expected tsv file")
     
@@ -131,3 +116,5 @@ if __name__ == "__main__":
     restext = get_protein_info_from_entrez(prot_accession_presentindb)
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
+    
+    # with open(args.)
