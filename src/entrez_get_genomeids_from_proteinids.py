@@ -6,7 +6,7 @@ import subprocess
 import xml
 import math
 
-def search_proteins_in_entrez(all_prot_accession_ids):
+def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
     proteins_not_found_in_database = []
 
     # Split requests into groups of 1000
@@ -33,7 +33,9 @@ def search_proteins_in_entrez(all_prot_accession_ids):
             for xml_notfoundphrase in xml_errlist.findall("PhraseNotFound"):
                 missing_protein_accession = xml_notfoundphrase.text
                 proteins_not_found_in_database.append(missing_protein_accession)
-            
+    
+    with open(missing_prots_output_fp, "w") as f:
+        f.write(",".join(proteins_not_found_in_database))
         
                 
     proteins_present_in_db = [acc for acc in all_prot_accession_ids if (acc not in proteins_not_found_in_database)]
@@ -95,6 +97,7 @@ if __name__ == "__main__":
     parser.add_argument("output_efetch_tsv")
     parser.add_argument("entrez_email")
     parser.add_argument("one_by_one_output")
+    parser.add_argument("list_of_missing_entrez_prots_output")
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
@@ -122,7 +125,7 @@ if __name__ == "__main__":
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
-    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
+    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search, list_of_missing_entrez_prots_output)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
