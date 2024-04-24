@@ -125,7 +125,7 @@ if __name__ == "__main__":
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
-    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search, list_of_missing_entrez_prots_output)
+    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search, args.list_of_missing_entrez_prots_output)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
