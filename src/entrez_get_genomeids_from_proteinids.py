@@ -44,7 +44,7 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
 
 
 def get_protein_info_from_entrez(prot_accessions, one_by_one_output_file):
-    group_search_size = 1
+    group_search_size = 100
     output_tsv_string = ""
 
     # one_by_one_output_file.write("orig prot accession\n")
@@ -58,7 +58,7 @@ def get_protein_info_from_entrez(prot_accessions, one_by_one_output_file):
         search_prots = prot_accessions[start_idx:end_idx]
         
         one_by_one_output_file.write("=============================\n")
-        one_by_one_output_file.write(search_prots[0] + "\n")
+        one_by_one_output_file.write("\t".join(search_prots) + "\n")
         html_response = Entrez.efetch(db="protein", id=",".join(search_prots), rettype='ipg', retmode='text')
         text_response = html_response.read().decode("utf-8")
         
