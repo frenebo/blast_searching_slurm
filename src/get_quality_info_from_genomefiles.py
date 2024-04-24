@@ -156,7 +156,7 @@ def get_info_about_genomes(genomes_dirpath):
     # }
     all_genomes_info = []
 
-    for gsubdir_name in genome_subdir_names:
+    for idx,gsubdir_name in enumerate(genome_subdir_names):
         genome_dirpath = os.path.join(genomes_dirpath, gsubdir_name)
         genome_accession = gsubdir_name[:-len(genomesubdir_expected_suffix)]
         
@@ -168,6 +168,10 @@ def get_info_about_genomes(genomes_dirpath):
         flattened_data["Genome Accession"] = genome_accession
 
         all_genomes_info.append(flattened_data)
+
+        print(".", end="", flush=True)
+        if idx % 200 == 0:
+            print("{}/{}".format(idx+1, len(genome_subdir_names)),end="",flush=True)
     
     return pd.DataFrame(all_genomes_info)
 
