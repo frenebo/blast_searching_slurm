@@ -185,7 +185,7 @@ if __name__ == "__main__":
     if not os.path.exists(args.source_genomes_directory):
         raise Exception("Directory {} does not exist".format(args.source_genomes_directory))
     if not os.path.isdir(args.source_genomes_directory):
-        raise Exception("{} is not a directory".format(args.source_genomes_directory)))
+        raise Exception("{} is not a directory".format(args.source_genomes_directory))
     if not args.results_stats_tsv.endswith(".tsv"):
         raise Exception("Expected results_stats_tsv to end in .tsv")
     
