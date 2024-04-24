@@ -126,7 +126,7 @@ if __name__ == "__main__":
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
-    restext = get_protein_info_from_entrez(prot_accession_presentindb, , onebyonefile)
+        restext = get_protein_info_from_entrez(prot_accession_presentindb,  onebyonefile)
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
     
