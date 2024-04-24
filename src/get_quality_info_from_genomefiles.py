@@ -1,6 +1,7 @@
 import argparse
 import os
 import pandas as pd
+import json
 
 def get_genomesubdir_names(genomes_dirpath, expected_suffix):
     all_dircontents = os.listdir(genomes_dirpath)
