@@ -10,7 +10,7 @@ def search_proteins_in_entrez(all_prot_accession_ids):
     proteins_not_found_in_database = []
 
     # Split requests into groups of 1000
-    group_search_size = 1
+    group_search_size = 500
     for i in range(math.ceil(len(all_prot_accession_ids) / group_search_size)):
         start_idx = i * group_search_size
         end_idx =  (i + 1) * group_search_size
@@ -122,7 +122,7 @@ if __name__ == "__main__":
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
-        prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
+    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
