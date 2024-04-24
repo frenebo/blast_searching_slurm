@@ -116,11 +116,12 @@ if __name__ == "__main__":
                 continue
             
             refs_for_protseq_match = line_vals[3]
+            prot_accessions_to_search.append(refs_for_protseq_match.split(";")[0].split("|")[1])
             # cnt = 0
-            for protref in refs_for_protseq_match.split(";"):
-                prot_accession = protref.split("|")[1]
-                # print(prot_accession)
-                prot_accessions_to_search.append(prot_accession)
+            # for protref in refs_for_protseq_match.split(";"):
+            #     prot_accession = protref.split("|")[1]
+            #     # print(prot_accession)
+            #     prot_accessions_to_search.append(prot_accession)
                 # break
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
