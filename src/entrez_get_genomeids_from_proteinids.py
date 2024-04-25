@@ -25,7 +25,7 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
         xml.etree.ElementTree.indent(xml_resp, space='  ', level=0)
-        print(xml.etree.ElementTree.tostring(xml_resp, pretty_print=True))
+        print(xml.etree.ElementTree.tostring(xml_resp))
         # print etree.tostring(x, pretty_print=True)
 
         xml_errlist = xml_resp.find("ErrorList")
