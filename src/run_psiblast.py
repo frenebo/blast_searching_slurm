@@ -98,9 +98,10 @@ if __name__ == "__main__":
     required.add_argument('--output_tsv', required=True, help="Output .tsv file to write results to")
     required.add_argument('--db_name', required=True, help="Name of the database to search for matches. Should probably be nr.")
     required.add_argument('--slurmfile_path', required=True, help="Filepath for where to put the slurm file")
-    
-    have_defaults.add_argument('--jobname', default="psiblast", help="Name for the slurm job")
-    have_defaults.add_argument('--nthreads', default=4, type=int, help="How many threads to use in blast search. Any increase above 6 likely will not help.")
+    default_jobname_val="psiblast"
+    default_nthreads_val=4
+    have_defaults.add_argument('--jobname', default=default_jobname_val, help="Name for the slurm job. Default: {}".format(default_jobname_val))
+    have_defaults.add_argument('--nthreads', default=default_nthreads_val, type=int, help="How many threads to use in blast search. Any increase above 6 likely will not help.")
     have_defaults.add_argument('--max_target_seqs', default=100000, type=int, help="Max number of matches before BLAST cuts off the output file. Make this bigger than it needs to be!")
     have_defaults.add_argument('--word_size', default=3, help="Blast algorithm word size")
     have_defaults.add_argument('--timestring', default="04:00:00", help="HH:MM:SS formatted time to allow slurm job to run.")
