@@ -99,11 +99,11 @@ if __name__ == "__main__":
     required.add_argument('--db_name', required=True, help="Name of the database to search for matches. Should probably be nr.")
     required.add_argument('--slurmfile_path', required=True, help="Filepath for where to put the slurm file")
     
-    have_defaults.add_argument('--jobname', required=True, default="psiblast", help="Name for the slurm job")
-    have_defaults.add_argument('--nthreads', required=True, default=4, type=int, help="How many threads to use in blast search. Any increase above 6 likely will not help.")
-    have_defaults.add_argument('--max_target_seqs', required=True, default=100000, type=int, help="Max number of matches before BLAST cuts off the output file. Make this bigger than it needs to be!")
-    have_defaults.add_argument('--word_size', required=True, default=3, help="Blast algorithm word size")
-    have_defaults.add_argument('--timestring', required=True, default="04:00:00", help="HH:MM:SS formatted time to allow slurm job to run.")
+    have_defaults.add_argument('--jobname', default="psiblast", help="Name for the slurm job")
+    have_defaults.add_argument('--nthreads', default=4, type=int, help="How many threads to use in blast search. Any increase above 6 likely will not help.")
+    have_defaults.add_argument('--max_target_seqs', default=100000, type=int, help="Max number of matches before BLAST cuts off the output file. Make this bigger than it needs to be!")
+    have_defaults.add_argument('--word_size', default=3, help="Blast algorithm word size")
+    have_defaults.add_argument('--timestring', default="04:00:00", help="HH:MM:SS formatted time to allow slurm job to run.")
 
 
     args = parser.parse_args()
