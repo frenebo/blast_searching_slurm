@@ -113,20 +113,22 @@ if __name__ == "__main__":
     prot_accessions_to_search = []
     
     with open(args.source_blast_tsv, "r") as f:
-        for line in f:
+        for i, line in enumerate(f):
+            if i >= args.protcount_limit:
+                break
+                
             line_vals = line.split("\t")
             if len(line_vals) <= 1:
                 continue
             
             refs_for_protseq_match = line_vals[3]
             if args.nodupsearches:
-
                 prot_accessions_to_search.append(refs_for_protseq_match.split(";")[0].split("|")[1])
             else:
                 for protnamestring in refs_for_protseq_match.split(";"):
                     prot_accessions_to_search.append(protnamestring.split("|")[1])
     
-    prot_accessions_to_search = prot_accessions_to_search[:int(args.protcount_limit)]
+    # prot_accessions_to_search = prot_accessions_to_search[:int(args.protcount_limit)]
 
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
