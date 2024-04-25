@@ -56,15 +56,6 @@ def prepare_blast_slurmjob_text(
         "date\n"
     
     return slurm_setup + tellbash_echo_commands + module_setup + start_timestamp + psiblast_command + end_timestamp
-    
-    # "\n" +
-    # "python3 myscript.py""
-    
-#     export BLASTDB=/scratch/gpfs/pk5192/ncbi_blastdatabase_downloads/nrstuff/
-
-# psiblast -db nr -query /home/pk5192/Documents/seqtest/doing_with_slurm/MtrC_WP_164927685.1.fasta -num_iterations 1  -out_pssm /home/pk5192/Documents/seqtest/doing_with_slurm/mypssm.smp -save_each_pssm   -evalue 0.05 -word_size 3 -outfmt 10 -max_target_seqs 500 -num_threads 4 -out myresultfile.txt
-
-
 
 
 def start_slurm_job(slurmjob_path):
