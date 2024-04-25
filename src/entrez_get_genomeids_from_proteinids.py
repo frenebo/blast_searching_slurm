@@ -43,7 +43,7 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
     return proteins_present_in_db
 
 
-def get_protein_info_from_entrez(prot_accessions, one_by_one_output_file, info_search_size, protcount_limit):
+def get_protein_info_from_entrez(prot_accessions, one_by_one_output_file, info_search_size):
     group_search_size = info_search_size
     output_tsv_string = ""
 
@@ -119,6 +119,8 @@ if __name__ == "__main__":
             
             refs_for_protseq_match = line_vals[3]
             prot_accessions_to_search.append(refs_for_protseq_match.split(";")[0].split("|")[1])
+    
+    prot_accessions_to_search = prot_accessions_to_search[:int(args.protcount_limit)]
 
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
@@ -127,6 +129,6 @@ if __name__ == "__main__":
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
-        restext = get_protein_info_from_entrez(prot_accession_presentindb,  onebyonefile, info_search_size=int(args.info_search_size), protcount_limit=int(args.protcount_limit))
+        restext = get_protein_info_from_entrez(prot_accession_presentindb,  onebyonefile, info_search_size=int(args.info_search_size))
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
