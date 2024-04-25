@@ -114,9 +114,9 @@ if __name__ == "__main__":
     
     with open(args.source_blast_tsv, "r") as f:
         for i, line in enumerate(f):
-            if i >= args.protcount_limit:
+            if i >= int(args.protcount_limit):
                 break
-                
+
             line_vals = line.split("\t")
             if len(line_vals) <= 1:
                 continue
