@@ -100,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument("list_of_missing_entrez_prots_output")
     parser.add_argument("info_search_size")
     parser.add_argument("protcount_limit")
+    parser.add_argument("--nodupsearches",action='store_true')
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
         raise Exception("Expected tsv file!")
@@ -118,7 +119,12 @@ if __name__ == "__main__":
                 continue
             
             refs_for_protseq_match = line_vals[3]
-            prot_accessions_to_search.append(refs_for_protseq_match.split(";")[0].split("|")[1])
+            if args.nodupsearches:
+
+                prot_accessions_to_search.append(refs_for_protseq_match.split(";")[0].split("|")[1])
+            else:
+                for protnamestring in refs_for_protseq_match.split(";"):
+                    prot_accessions_to_search.append(protnamestring.split("|")[1])
     
     prot_accessions_to_search = prot_accessions_to_search[:int(args.protcount_limit)]
 
