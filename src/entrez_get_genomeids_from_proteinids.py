@@ -5,7 +5,7 @@ import subprocess
 import xml
 import math
 
-def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
+def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp, entrezxmlfileout):
     proteins_not_found_in_database = []
 
     # Split requests into groups of 1000
@@ -25,7 +25,8 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
         xml.etree.ElementTree.indent(xml_resp, space='  ', level=0)
-        print(xml.etree.ElementTree.tostring(xml_resp))
+        with open(entrezxmlfileout, "w") as f:
+            f.write(xml.etree.ElementTree.tostring(xml_resp))
         # print etree.tostring(x, pretty_print=True)
 
         xml_errlist = xml_resp.find("ErrorList")
@@ -102,6 +103,7 @@ if __name__ == "__main__":
     parser.add_argument("list_of_missing_entrez_prots_output")
     parser.add_argument("info_search_size")
     parser.add_argument("protcount_limit")
+    parser.add_argument("args.entrezxmlfileout")
     parser.add_argument("--nodupsearches",action='store_true')
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
@@ -135,10 +137,10 @@ if __name__ == "__main__":
                 
     # prot_accessions_to_search = prot_accessions_to_search[0:120]
     print("Searching entrez for {} protein accessions".format(len(prot_accessions_to_search)))
-    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search, args.list_of_missing_entrez_prots_output)
+    prot_accession_presentindb = search_proteins_in_entrez(prot_accessions_to_search, args.list_of_missing_entrez_prots_output, args.entrezxmlfileout)
     print("Found {} accessions through entrez, continuing with those".format(len(prot_accession_presentindb)))
 
     with open(args.one_by_one_output, "w") as onebyonefile:
-        restext = get_protein_info_from_entrez(prot_accession_presentindb,  onebyonefile, info_search_size=int(args.info_search_size))
+        restext = get_protein_info_from_entrez(prot_accession_presentindb,  onebyonefile, info_search_size=int(args.info_search_size),)
     with open(args.output_efetch_tsv, "w") as f:
         f.write(restext)
