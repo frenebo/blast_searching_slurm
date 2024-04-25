@@ -20,7 +20,8 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp, e
         print("Searching entrez for protein indices {}-{}".format(start_idx,end_idx-1))
         
         prot_search_group = all_prot_accession_ids[start_idx : end_idx]
-        http_response = Entrez.esearch("protein", ",".join(prot_search_group))
+        # print(prot_search_group)
+        http_response = Entrez.esearch("ipg", ",".join(prot_search_group))
         text_response = http_response.read().decode('utf-8')
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
