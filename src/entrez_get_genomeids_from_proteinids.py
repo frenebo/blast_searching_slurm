@@ -24,6 +24,7 @@ def search_proteins_in_entrez(all_prot_accession_ids, missing_prots_output_fp):
         text_response = http_response.read().decode('utf-8')
 
         xml_resp = xml.etree.ElementTree.fromstring(text_response)
+        xml.etree.ElementTree.indent(xml_resp, space='  ', level=0)
         print(xml.etree.ElementTree.tostring(xml_resp, pretty_print=True))
         # print etree.tostring(x, pretty_print=True)
 
