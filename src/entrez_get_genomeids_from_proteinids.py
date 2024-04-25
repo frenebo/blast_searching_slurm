@@ -103,7 +103,7 @@ if __name__ == "__main__":
     parser.add_argument("list_of_missing_entrez_prots_output")
     parser.add_argument("info_search_size")
     parser.add_argument("protcount_limit")
-    parser.add_argument("args.entrezxmlfileout")
+    parser.add_argument("entrezxmlfileout")
     parser.add_argument("--nodupsearches",action='store_true')
     args = parser.parse_args()
     if args.source_blast_tsv[-4:] != ".tsv":
